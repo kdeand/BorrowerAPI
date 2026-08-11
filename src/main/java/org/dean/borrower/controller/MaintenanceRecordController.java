@@ -24,4 +24,9 @@ public class MaintenanceRecordController {
     public MaintenanceRecord createMaintenanceRecord(@RequestBody MaintenanceRecord maintenanceRecord) {
         return maintenanceRecordService.createMaintenanceRecord(maintenanceRecord);
     }
+
+    @GetMapping("/{id}")
+    public MaintenanceRecord getMaintenanceRecordById(@PathVariable Long id) {
+        return maintenanceRecordService.getMaintenanceRecordById(id);
+    }
 }

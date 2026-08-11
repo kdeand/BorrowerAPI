@@ -21,4 +21,8 @@ public class BorrowRequestService {
     public BorrowRequest createBorrowRequest(BorrowRequest borrowRequest) {
         return borrowRequestRepository.save(borrowRequest);
     }
+
+    public BorrowRequest getBorrowRequestById(Long id) {
+        return borrowRequestRepository.findById(id).orElse(null);
+    }
 }

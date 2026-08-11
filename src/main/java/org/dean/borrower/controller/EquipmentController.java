@@ -26,4 +26,9 @@ public class EquipmentController {
     public Equipment createEquipment(@RequestBody Equipment equipment) {
         return equipmentService.createEquipment(equipment);
     }
+
+    @GetMapping("/{id}")
+    public Equipment getEquipmentById(@PathVariable Long id){
+        return equipmentService.getEquipmentById(id);
+    }
 }

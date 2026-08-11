@@ -21,4 +21,9 @@ public class BorrowRequestItemService {
     public BorrowRequestItem createBorrowRequestItem(BorrowRequestItem borrowRequestItem) {
         return borrowRequestItemRepository.save(borrowRequestItem);
     }
+
+    public BorrowRequestItem getBorrowRequestItemById(Long id) {
+        return borrowRequestItemRepository.findById(id).orElse(null);
+
+    }
 }

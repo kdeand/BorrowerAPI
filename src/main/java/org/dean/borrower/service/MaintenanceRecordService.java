@@ -21,4 +21,8 @@ public class MaintenanceRecordService {
     public MaintenanceRecord createMaintenanceRecord(MaintenanceRecord maintenanceRecord) {
         return maintenanceRecordRepository.save(maintenanceRecord);
     }
+
+    public MaintenanceRecord getMaintenanceRecordById(Long id) {
+        return maintenanceRecordRepository.findById(id).orElse(null);
+    }
 }

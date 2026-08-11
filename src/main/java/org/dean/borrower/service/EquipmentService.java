@@ -22,4 +22,8 @@ public class EquipmentService {
     public Equipment createEquipment(Equipment equipment) {
         return equipmentRepository.save(equipment);
     }
+
+    public Equipment getEquipmentById(Long id) {
+        return equipmentRepository.findById(id).orElse(null);
+    }
 }

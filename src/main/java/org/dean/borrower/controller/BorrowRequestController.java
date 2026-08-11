@@ -24,4 +24,9 @@ public class BorrowRequestController {
     public BorrowRequest createBorrowRequest(@RequestBody BorrowRequest borrowRequest) {
         return borrowRequestService.createBorrowRequest(borrowRequest);
     }
+
+    @GetMapping("/{id}")
+    public BorrowRequest getBorrowRequestById(@PathVariable Long id) {
+        return borrowRequestService.getBorrowRequestById(id);
+    }
 }

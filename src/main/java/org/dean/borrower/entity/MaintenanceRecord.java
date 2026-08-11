@@ -6,7 +6,7 @@ import org.dean.borrower.enums.EquipmentCondition;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Maintenance Record")
+@Table(name = "maintenance_record")
 public class MaintenanceRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
