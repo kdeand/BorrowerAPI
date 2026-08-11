@@ -2,9 +2,7 @@ package org.dean.borrower.controller;
 
 import org.dean.borrower.entity.MaintenanceRecord;
 import org.dean.borrower.service.MaintenanceRecordService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +18,10 @@ public class MaintenanceRecordController {
     @GetMapping
     public List<MaintenanceRecord> getAllMaintenanceRecords() {
         return maintenanceRecordService.getAllMaintenanceRecords();
+    }
+
+    @PostMapping
+    public MaintenanceRecord createMaintenanceRecord(@RequestBody MaintenanceRecord maintenanceRecord) {
+        return maintenanceRecordService.createMaintenanceRecord(maintenanceRecord);
     }
 }

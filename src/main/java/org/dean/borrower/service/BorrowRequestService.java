@@ -17,4 +17,8 @@ public class BorrowRequestService {
     public List<BorrowRequest> getAllBorrowRequests() {
         return borrowRequestRepository.findAll();
     }
+
+    public BorrowRequest createBorrowRequest(BorrowRequest borrowRequest) {
+        return borrowRequestRepository.save(borrowRequest);
+    }
 }

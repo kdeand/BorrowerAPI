@@ -1,10 +1,9 @@
 package org.dean.borrower.controller;
 
 import org.dean.borrower.entity.Equipment;
+import org.dean.borrower.repository.EquipmentRepository;
 import org.dean.borrower.service.EquipmentService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +19,11 @@ public class EquipmentController {
     @GetMapping
     public List<Equipment> getAllEquipments() {
         return equipmentService.getAllEquipments();
+    }
+
+    //for the post method
+    @PostMapping
+    public Equipment createEquipment(@RequestBody Equipment equipment) {
+        return equipmentService.createEquipment(equipment);
     }
 }

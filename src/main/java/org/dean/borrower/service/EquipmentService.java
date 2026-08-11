@@ -18,4 +18,8 @@ public class EquipmentService {
     public List<Equipment> getAllEquipments() {
         return equipmentRepository.findAll();
     }
+
+    public Equipment createEquipment(Equipment equipment) {
+        return equipmentRepository.save(equipment);
+    }
 }

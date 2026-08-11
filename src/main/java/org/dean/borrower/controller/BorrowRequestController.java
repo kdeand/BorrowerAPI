@@ -2,9 +2,7 @@ package org.dean.borrower.controller;
 
 import org.dean.borrower.entity.BorrowRequest;
 import org.dean.borrower.service.BorrowRequestService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +18,10 @@ public class BorrowRequestController {
     @GetMapping
     public List<BorrowRequest> getAllBorrowRequests() {
         return borrowRequestService.getAllBorrowRequests();
+    }
+
+    @PostMapping
+    public BorrowRequest createBorrowRequest(@RequestBody BorrowRequest borrowRequest) {
+        return borrowRequestService.createBorrowRequest(borrowRequest);
     }
 }

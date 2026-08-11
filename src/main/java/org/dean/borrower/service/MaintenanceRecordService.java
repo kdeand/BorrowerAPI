@@ -17,4 +17,8 @@ public class MaintenanceRecordService {
     public List<MaintenanceRecord> getAllMaintenanceRecords() {
         return maintenanceRecordRepository.findAll();
     }
+
+    public MaintenanceRecord createMaintenanceRecord(MaintenanceRecord maintenanceRecord) {
+        return maintenanceRecordRepository.save(maintenanceRecord);
+    }
 }
