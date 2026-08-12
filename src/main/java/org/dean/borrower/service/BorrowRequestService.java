@@ -24,15 +24,22 @@ public class BorrowRequestService {
 
     public BorrowRequest getBorrowRequestById(Long id) {
         return borrowRequestRepository.findById(id).orElse(null);
+
     }
 
-//    public BorrowRequest updateBorrowRequest(Long id, BorrowRequest newBorrowRequest) {
-//        BorrowRequest existingBorrowRequest = borrowRequestRepository.findById(id).orElse(null);
-//
-//        if (existingBorrowRequest == null) {
-//            return null;
-//        }
-//
-//        existingBorrowRequest.setName(newBorrowRequest.getName());
-//    }
+    public BorrowRequest updateBorrowRequest(Long id, BorrowRequest newBorrowRequest) {
+        BorrowRequest existingBorrowRequest = borrowRequestRepository.findById(id).orElse(null);
+
+        if (existingBorrowRequest == null) {
+            return null;
+        }
+
+        existingBorrowRequest.setBorrower(newBorrowRequest.getBorrower());
+        existingBorrowRequest.setRequestDate(newBorrowRequest.getRequestDate());
+        existingBorrowRequest.setBorrowDate(newBorrowRequest.getBorrowDate());
+        existingBorrowRequest.setExpectedReturnDate(newBorrowRequest.getExpectedReturnDate());
+        existingBorrowRequest.setReturnDate(newBorrowRequest.getReturnDate());
+
+        return borrowRequestRepository.save(newBorrowRequest);
+    }
 }

@@ -28,16 +28,16 @@ public class CategoryService {
         return categoryRepository.findById(id).orElse(null);
     }
 
-//    public Category updateCategory (Long id, Category newCategory) {
-//        //find the id
-//        Category existingCategory = categoryRepository.findById(id).orElse(null);
-//        if (existingCategory == null) {
-//            return null;
-//        }
-//
-//        existingCategory.setName(newCategory.getName());
-//        existingCategory.setDescription(newCategory.getDescription());
-//
-//        return categoryRepository.save(existingCategory);
-//    }
+    public Category updateCategory (Long id, Category newCategory) {
+        //find the id
+        Category existingCategory = categoryRepository.findById(id).orElse(null);
+        if (existingCategory == null) {
+            return null;
+        }
+
+        existingCategory.setName(newCategory.getName());
+        existingCategory.setDescription(newCategory.getDescription());
+
+        return categoryRepository.save(existingCategory);
+    }
 }

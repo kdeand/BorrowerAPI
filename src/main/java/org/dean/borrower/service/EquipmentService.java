@@ -26,4 +26,23 @@ public class EquipmentService {
     public Equipment getEquipmentById(Long id) {
         return equipmentRepository.findById(id).orElse(null);
     }
+
+    public Equipment updateEquipment(Long id, Equipment newEquipment) {
+
+        Equipment existingEquipment = equipmentRepository.findById(id).orElse(null);
+
+        if (existingEquipment == null) {
+            return null;
+        }
+
+        existingEquipment.setName(newEquipment.getName());
+        existingEquipment.setAssetTag(newEquipment.getAssetTag());
+        existingEquipment.setDescription(newEquipment.getDescription());
+        existingEquipment.setCondition(newEquipment.getCondition());
+        existingEquipment.setStatus(newEquipment.getStatus());
+        existingEquipment.setCategory(newEquipment.getCategory());
+
+        return equipmentRepository.save(newEquipment);
+
+    }
 }

@@ -25,4 +25,19 @@ public class MaintenanceRecordService {
     public MaintenanceRecord getMaintenanceRecordById(Long id) {
         return maintenanceRecordRepository.findById(id).orElse(null);
     }
+
+    public MaintenanceRecord updateMaintenanceRecord(Long id, MaintenanceRecord newMaintenanceRecord) {
+        MaintenanceRecord existingMaintenanceRecord = maintenanceRecordRepository.findById(id).orElse(null);
+        if(existingMaintenanceRecord == null) {
+            return null;
+        }
+
+        existingMaintenanceRecord.setEquipment(newMaintenanceRecord.getEquipment());
+        existingMaintenanceRecord.setCondition(newMaintenanceRecord.getCondition());
+        existingMaintenanceRecord.setTechnician(newMaintenanceRecord.getTechnician());
+        existingMaintenanceRecord.setNotes(newMaintenanceRecord.getNotes());
+        existingMaintenanceRecord.setCreatedAt(newMaintenanceRecord.getCreatedAt());
+
+        return maintenanceRecordRepository.save(newMaintenanceRecord);
+    }
 }

@@ -32,20 +32,22 @@ public class BorrowRequestItemService {
 
     //update
 
-//    public BorrowRequestItem updateBorrowRequestItem(Long id, BorrowRequestItem newBorrowRequestItem) {
-//        //get the id
-//        BorrowRequestItem existingBorrowRequestItem = borrowRequestItemRepository.findById(id).orElse(null);
-//
-//        if(existingBorrowRequestItem == null) {
-//            return null;
-//        }
-//
-//        //else
-//        existingBorrowRequestItem.setName(newBorrowRequestItem.getName());
-//        existingBorrowRequestItem.setDescription(newBorrowRequestItem.getDescription());
-//
-//        return borrowRequestItemRepository.save(existingBorrowRequestItem);
-//
-//    }
+    public BorrowRequestItem updateBorrowRequestItem(Long id, BorrowRequestItem newBorrowRequestItem) {
+        //get the id
+        BorrowRequestItem existingBorrowRequestItem = borrowRequestItemRepository.findById(id).orElse(null);
+
+        if(existingBorrowRequestItem == null) {
+            return null;
+        }
+
+        //else
+        existingBorrowRequestItem.setName(newBorrowRequestItem.getName());
+        existingBorrowRequestItem.setDescription(newBorrowRequestItem.getDescription());
+        existingBorrowRequestItem.setBorrowRequest(newBorrowRequestItem.getBorrowRequest());
+        existingBorrowRequestItem.setEquipment(newBorrowRequestItem.getEquipment());
+
+        return borrowRequestItemRepository.save(existingBorrowRequestItem);
+
+    }
 
 }

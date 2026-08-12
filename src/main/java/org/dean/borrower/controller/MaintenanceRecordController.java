@@ -1,5 +1,6 @@
 package org.dean.borrower.controller;
 
+import com.sun.tools.javac.Main;
 import org.dean.borrower.entity.MaintenanceRecord;
 import org.dean.borrower.service.MaintenanceRecordService;
 import org.springframework.web.bind.annotation.*;
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/maintenanceRecords")
+@RequestMapping("/api/maintenance_record")
 public class MaintenanceRecordController {
     private final MaintenanceRecordService maintenanceRecordService;
 
@@ -28,5 +29,10 @@ public class MaintenanceRecordController {
     @GetMapping("/{id}")
     public MaintenanceRecord getMaintenanceRecordById(@PathVariable Long id) {
         return maintenanceRecordService.getMaintenanceRecordById(id);
+    }
+
+    @PutMapping("/{id}")
+    public MaintenanceRecord updateMaintenanceRecord(@PathVariable Long id, @RequestBody MaintenanceRecord maintenanceRecord) {
+        return maintenanceRecordService.updateMaintenanceRecord(id, maintenanceRecord);
     }
 }

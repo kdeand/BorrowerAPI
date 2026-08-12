@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/borrowRequests")
+@RequestMapping("/api/borrow_requests")
 public class BorrowRequestController {
     private final BorrowRequestService borrowRequestService;
 
@@ -29,4 +29,11 @@ public class BorrowRequestController {
     public BorrowRequest getBorrowRequestById(@PathVariable Long id) {
         return borrowRequestService.getBorrowRequestById(id);
     }
+
+    @PutMapping("/{id}")
+    public BorrowRequest updateBorrowRequest(@PathVariable Long id, @RequestBody BorrowRequest borrowRequest) {
+        return borrowRequestService.updateBorrowRequest(id, borrowRequest);
+    }
+
+
 }

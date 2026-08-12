@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/equipments")
+@RequestMapping("/api/equipment")
 public class EquipmentController {
     private final EquipmentService equipmentService;
 
@@ -30,5 +30,10 @@ public class EquipmentController {
     @GetMapping("/{id}")
     public Equipment getEquipmentById(@PathVariable Long id){
         return equipmentService.getEquipmentById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Equipment updateEquipment(@PathVariable Long id, @RequestBody Equipment equipment) {
+        return equipmentService.updateEquipment(id, equipment);
     }
 }
