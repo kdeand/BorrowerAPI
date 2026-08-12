@@ -29,4 +29,9 @@ public class BorrowRequestItemController {
     public BorrowRequestItem getBorrowRequestItemById(@PathVariable Long id) {
         return borrowRequestItemService.getBorrowRequestItemById(id);
     }
+
+//    @PutMapping("/{id}")
+//    public BorrowRequestItem updateBorrowRequestItem(@PathVariable Long id, @RequestBody BorrowRequestItem borrowRequestItem) {
+//        return borrowRequestItemService.updateBorrowRequestItem(id, borrowRequestItem);
+//    }
 }

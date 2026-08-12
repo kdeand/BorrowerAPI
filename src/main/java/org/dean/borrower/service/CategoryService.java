@@ -27,4 +27,17 @@ public class CategoryService {
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id).orElse(null);
     }
+
+//    public Category updateCategory (Long id, Category newCategory) {
+//        //find the id
+//        Category existingCategory = categoryRepository.findById(id).orElse(null);
+//        if (existingCategory == null) {
+//            return null;
+//        }
+//
+//        existingCategory.setName(newCategory.getName());
+//        existingCategory.setDescription(newCategory.getDescription());
+//
+//        return categoryRepository.save(existingCategory);
+//    }
 }

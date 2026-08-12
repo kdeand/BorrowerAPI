@@ -1,12 +1,16 @@
 package org.dean.borrower.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.dean.borrower.enums.BorrowRequestStatus;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "borrow_requests")
+@Setter
+@Getter
 public class BorrowRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

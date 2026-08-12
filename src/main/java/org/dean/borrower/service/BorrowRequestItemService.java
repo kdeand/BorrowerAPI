@@ -14,16 +14,38 @@ public class BorrowRequestItemService {
         this.borrowRequestItemRepository = borrowRequestItemRepository;
     }
 
+    //get all query
     public List<BorrowRequestItem> getAllBorrowRequestItems() {
         return borrowRequestItemRepository.findAll();
     }
 
+    //create borrow request item
     public BorrowRequestItem createBorrowRequestItem(BorrowRequestItem borrowRequestItem) {
         return borrowRequestItemRepository.save(borrowRequestItem);
     }
 
+    //find by id
     public BorrowRequestItem getBorrowRequestItemById(Long id) {
         return borrowRequestItemRepository.findById(id).orElse(null);
 
     }
+
+    //update
+
+//    public BorrowRequestItem updateBorrowRequestItem(Long id, BorrowRequestItem newBorrowRequestItem) {
+//        //get the id
+//        BorrowRequestItem existingBorrowRequestItem = borrowRequestItemRepository.findById(id).orElse(null);
+//
+//        if(existingBorrowRequestItem == null) {
+//            return null;
+//        }
+//
+//        //else
+//        existingBorrowRequestItem.setName(newBorrowRequestItem.getName());
+//        existingBorrowRequestItem.setDescription(newBorrowRequestItem.getDescription());
+//
+//        return borrowRequestItemRepository.save(existingBorrowRequestItem);
+//
+//    }
+
 }

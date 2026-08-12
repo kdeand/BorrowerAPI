@@ -1,9 +1,13 @@
 package org.dean.borrower.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "equipment")
+@Setter
+@Getter
 public class Equipment {
 
     @Id

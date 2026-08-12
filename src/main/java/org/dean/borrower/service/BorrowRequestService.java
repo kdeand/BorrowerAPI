@@ -25,4 +25,14 @@ public class BorrowRequestService {
     public BorrowRequest getBorrowRequestById(Long id) {
         return borrowRequestRepository.findById(id).orElse(null);
     }
+
+//    public BorrowRequest updateBorrowRequest(Long id, BorrowRequest newBorrowRequest) {
+//        BorrowRequest existingBorrowRequest = borrowRequestRepository.findById(id).orElse(null);
+//
+//        if (existingBorrowRequest == null) {
+//            return null;
+//        }
+//
+//        existingBorrowRequest.setName(newBorrowRequest.getName());
+//    }
 }

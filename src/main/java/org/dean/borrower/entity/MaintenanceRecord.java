@@ -1,12 +1,16 @@
 package org.dean.borrower.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.dean.borrower.enums.EquipmentCondition;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "maintenance_record")
+@Setter
+@Getter
 public class MaintenanceRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
