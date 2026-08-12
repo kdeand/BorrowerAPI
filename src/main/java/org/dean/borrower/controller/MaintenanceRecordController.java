@@ -35,4 +35,9 @@ public class MaintenanceRecordController {
     public MaintenanceRecord updateMaintenanceRecord(@PathVariable Long id, @RequestBody MaintenanceRecord maintenanceRecord) {
         return maintenanceRecordService.updateMaintenanceRecord(id, maintenanceRecord);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteMaintenanceRecord(@PathVariable Long id) {
+        maintenanceRecordService.deleteMaintenanceRecord(id);
+    }
 }

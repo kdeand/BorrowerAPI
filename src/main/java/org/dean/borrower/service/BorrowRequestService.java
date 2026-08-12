@@ -42,4 +42,8 @@ public class BorrowRequestService {
 
         return borrowRequestRepository.save(newBorrowRequest);
     }
+
+    public void deleteBorrowRequest(Long id) {
+        borrowRequestRepository.deleteById(id);
+    }
 }

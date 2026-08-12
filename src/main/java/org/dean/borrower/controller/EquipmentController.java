@@ -36,4 +36,9 @@ public class EquipmentController {
     public Equipment updateEquipment(@PathVariable Long id, @RequestBody Equipment equipment) {
         return equipmentService.updateEquipment(id, equipment);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteEquipment(@PathVariable Long id) {
+        equipmentService.deleteEquipment();
+    }
 }

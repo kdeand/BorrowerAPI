@@ -30,7 +30,7 @@ public class UserService {
     public User updateUser(Long id, User newUser) {
         User existingUser = userRepository.findById(id).orElse(null);
 
-        if(existingUser == null) {
+        if (existingUser == null) {
             return null;
 
         }
@@ -42,6 +42,11 @@ public class UserService {
         existingUser.setPassword(newUser.getPassword());
 
         return userRepository.save(newUser);
-        
+
+    }
+
+    //delete
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }

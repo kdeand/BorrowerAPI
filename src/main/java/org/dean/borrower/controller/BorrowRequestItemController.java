@@ -34,4 +34,9 @@ public class BorrowRequestItemController {
     public BorrowRequestItem updateBorrowRequestItem(@PathVariable Long id, @RequestBody BorrowRequestItem borrowRequestItem) {
         return borrowRequestItemService.updateBorrowRequestItem(id, borrowRequestItem);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteBorrowRequestItem(@PathVariable Long id) {
+        borrowRequestItemService.deleteBorrowRequestItem(id);
+    }
 }

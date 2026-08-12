@@ -40,4 +40,8 @@ public class MaintenanceRecordService {
 
         return maintenanceRecordRepository.save(newMaintenanceRecord);
     }
+
+    public void deleteMaintenanceRecord(Long id) {
+        maintenanceRecordRepository.deleteById(id);
+    }
 }
