@@ -39,6 +39,6 @@ public class EquipmentController {
 
     @DeleteMapping("/{id}")
     public void deleteEquipment(@PathVariable Long id) {
-        equipmentService.deleteEquipment();
+        equipmentService.deleteEquipment(id);
     }
 }
