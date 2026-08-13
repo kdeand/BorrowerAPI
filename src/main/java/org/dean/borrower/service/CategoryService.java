@@ -42,7 +42,12 @@ public class CategoryService {
     }
 
     //delete
-    public void deleteCategory(Long id) {
+    public boolean deleteCategory(Long id) {
+        if(!categoryRepository.existsById(id)) {
+            return false;
+        }
         categoryRepository.deleteById(id);
+
+        return true;
     }
 }

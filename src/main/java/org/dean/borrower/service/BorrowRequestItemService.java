@@ -49,7 +49,12 @@ public class BorrowRequestItemService {
     }
 
     //delete
-    public void deleteBorrowRequestItem(Long id) {
+    public boolean deleteBorrowRequestItem(Long id) {
+
+        if(borrowRequestItemRepository.existsById(id)) {
+            return false;
+        }
         borrowRequestItemRepository.deleteById(id);
+        return true;
     }
 }

@@ -1,7 +1,9 @@
 package org.dean.borrower.controller;
 
+import org.apache.coyote.Response;
 import org.dean.borrower.entity.BorrowRequest;
 import org.dean.borrower.service.BorrowRequestService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,27 +18,49 @@ public class BorrowRequestController {
     }
 
     @GetMapping
-    public List<BorrowRequest> getAllBorrowRequests() {
-        return borrowRequestService.getAllBorrowRequests();
+    public ResponseEntity<List<BorrowRequest>> getAllBorrowRequests() {
+
+        List<BorrowRequest> borrowRequests = borrowRequestService.getAllBorrowRequests();
+        return ResponseEntity.ok(borrowRequests);
     }
 
     @PostMapping
-    public BorrowRequest createBorrowRequest(@RequestBody BorrowRequest borrowRequest) {
-        return borrowRequestService.createBorrowRequest(borrowRequest);
+    public ResponseEntity<BorrowRequest> createBorrowRequest(@RequestBody BorrowRequest borrowRequest) {
+        BorrowRequest borrowRequests = borrowRequestService.createBorrowRequest(borrowRequest);
+
+        return ResponseEntity.status(201).body(borrowRequests);
     }
 
     @GetMapping("/{id}")
-    public BorrowRequest getBorrowRequestById(@PathVariable Long id) {
-        return borrowRequestService.getBorrowRequestById(id);
+    public ResponseEntity<BorrowRequest> getBorrowRequestById(@PathVariable Long id) {
+        BorrowRequest borrowRequest = borrowRequestService.getBorrowRequestById(id);
+
+        if(borrowRequest == null) {
+            ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(borrowRequest);
     }
 
     @PutMapping("/{id}")
-    public BorrowRequest updateBorrowRequest(@PathVariable Long id, @RequestBody BorrowRequest borrowRequest) {
-        return borrowRequestService.updateBorrowRequest(id, borrowRequest);
+    public ResponseEntity<BorrowRequest> updateBorrowRequest(@PathVariable Long id, @RequestBody BorrowRequest borrowRequest) {
+        BorrowRequest updatedBorrowRequest = borrowRequestService.updateBorrowRequest(id, borrowRequest);
+
+        if(updatedBorrowRequest == null) {
+            ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(updatedBorrowRequest);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBorrowRequest(@PathVariable Long id) {
-        borrowRequestService.deleteBorrowRequest(id);
+    public ResponseEntity<Void> deleteBorrowRequest(@PathVariable Long id) {
+
+        boolean deleted = borrowRequestService.deleteBorrowRequest(id);
+        if(!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.noContent().build();
     }
 }

@@ -46,7 +46,13 @@ public class EquipmentService {
 
     }
 
-    public void deleteEquipment(Long id) {
+    public boolean deleteEquipment(Long id) {
+
+        if(equipmentRepository.existsById(id)){
+            return false;
+        }
         equipmentRepository.deleteById(id);
+
+        return true;
     }
 }

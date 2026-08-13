@@ -41,7 +41,12 @@ public class MaintenanceRecordService {
         return maintenanceRecordRepository.save(newMaintenanceRecord);
     }
 
-    public void deleteMaintenanceRecord(Long id) {
+    public boolean deleteMaintenanceRecord(Long id) {
+
+        if(maintenanceRecordRepository.existsById(id)) {
+            return false;
+        }
         maintenanceRecordRepository.deleteById(id);
+        return true;
     }
 }

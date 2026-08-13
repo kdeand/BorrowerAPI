@@ -1,8 +1,11 @@
 package org.dean.borrower.controller;
 
+import org.apache.coyote.Response;
 import org.dean.borrower.entity.Category;
 import org.dean.borrower.service.CategoryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -17,28 +20,50 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> getAllCategories() {
+    public ResponseEntity<List<Category>> getAllCategories() {
 
-        return categoryService.getAllCategories();
+        List<Category> categories =  categoryService.getAllCategories();
+        return ResponseEntity.ok(categories);
     }
 
     @PostMapping
-    public Category createCategory(@RequestBody Category category) {
-        return categoryService.createCategory(category);
+    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+
+        Category createdCategory = categoryService.createCategory(category);
+
+        return ResponseEntity.status(201).body(createdCategory);
     }
 
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable Long id) {
-        return categoryService.getCategoryById(id);
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
+        Category category = categoryService.getCategoryById(id);
+
+        if(category == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(category);
     }
 
     @PutMapping("/{id}")
-    public Category updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        return categoryService.updateCategory(id, category);
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
+        Category updatedCategory = categoryService.updateCategory(id, category);
+
+        if(updatedCategory == null) {
+            ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(updatedCategory);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCategory (@PathVariable Long id) {
-        categoryService.deleteCategory(id);
+    public ResponseEntity<Void> deleteCategory (@PathVariable Long id) {
+        boolean deleted = categoryService.deleteCategory(id);
+
+        if(!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.noContent().build();
     }
 }

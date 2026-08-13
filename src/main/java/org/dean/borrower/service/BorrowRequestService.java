@@ -43,7 +43,14 @@ public class BorrowRequestService {
         return borrowRequestRepository.save(newBorrowRequest);
     }
 
-    public void deleteBorrowRequest(Long id) {
+    public boolean deleteBorrowRequest(Long id) {
+
+        if(!borrowRequestRepository.existsById(id)){
+            return false;
+        }
+
         borrowRequestRepository.deleteById(id);
+
+        return true;
     }
 }
