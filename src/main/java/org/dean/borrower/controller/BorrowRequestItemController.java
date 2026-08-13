@@ -1,5 +1,6 @@
 package org.dean.borrower.controller;
 
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.dean.borrower.entity.BorrowRequestItem;
 import org.dean.borrower.service.BorrowRequestItemService;
@@ -24,7 +25,7 @@ public class BorrowRequestItemController {
     }
 
     @PostMapping
-    public ResponseEntity<BorrowRequestItem> createBorrowRequestItem(@RequestBody BorrowRequestItem borrowRequestItem) {
+    public ResponseEntity<BorrowRequestItem> createBorrowRequestItem(@RequestBody @Valid BorrowRequestItem borrowRequestItem) {
         BorrowRequestItem createdBorrowRequestItem =  borrowRequestItemService.createBorrowRequestItem(borrowRequestItem);
         return ResponseEntity.status(201).body(createdBorrowRequestItem);
     }
@@ -41,7 +42,7 @@ public class BorrowRequestItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BorrowRequestItem> updateBorrowRequestItem(@PathVariable Long id, @RequestBody BorrowRequestItem borrowRequestItem) {
+    public ResponseEntity<BorrowRequestItem> updateBorrowRequestItem(@PathVariable Long id, @RequestBody @Valid BorrowRequestItem borrowRequestItem) {
 
         BorrowRequestItem updatedBorrowRequestItem = borrowRequestItemService.updateBorrowRequestItem(id, borrowRequestItem);
         if(updatedBorrowRequestItem == null) {

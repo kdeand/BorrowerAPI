@@ -1,5 +1,6 @@
 package org.dean.borrower.controller;
 
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.dean.borrower.entity.User;
 import org.dean.borrower.service.UserService;
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
         User createdUser = userService.createUser(user);
 
         return ResponseEntity.status(201).body(createdUser);
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody @Valid User user) {
         User updatedUser = userService.updateUser(id, user);
         if(updatedUser == null) {
             return ResponseEntity.notFound().build();

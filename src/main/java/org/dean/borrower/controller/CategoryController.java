@@ -1,5 +1,6 @@
 package org.dean.borrower.controller;
 
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.dean.borrower.entity.Category;
 import org.dean.borrower.service.CategoryService;
@@ -27,7 +28,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+    public ResponseEntity<Category> createCategory(@RequestBody @Valid Category category) {
 
         Category createdCategory = categoryService.createCategory(category);
 
@@ -46,7 +47,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody @Valid Category category) {
         Category updatedCategory = categoryService.updateCategory(id, category);
 
         if(updatedCategory == null) {

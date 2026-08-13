@@ -1,5 +1,6 @@
 package org.dean.borrower.controller;
 
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.dean.borrower.entity.BorrowRequest;
 import org.dean.borrower.service.BorrowRequestService;
@@ -25,7 +26,7 @@ public class BorrowRequestController {
     }
 
     @PostMapping
-    public ResponseEntity<BorrowRequest> createBorrowRequest(@RequestBody BorrowRequest borrowRequest) {
+    public ResponseEntity<BorrowRequest> createBorrowRequest(@RequestBody @Valid BorrowRequest borrowRequest) {
         BorrowRequest borrowRequests = borrowRequestService.createBorrowRequest(borrowRequest);
 
         return ResponseEntity.status(201).body(borrowRequests);
@@ -43,7 +44,7 @@ public class BorrowRequestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BorrowRequest> updateBorrowRequest(@PathVariable Long id, @RequestBody BorrowRequest borrowRequest) {
+    public ResponseEntity<BorrowRequest> updateBorrowRequest(@PathVariable Long id, @RequestBody @Valid BorrowRequest borrowRequest) {
         BorrowRequest updatedBorrowRequest = borrowRequestService.updateBorrowRequest(id, borrowRequest);
 
         if(updatedBorrowRequest == null) {

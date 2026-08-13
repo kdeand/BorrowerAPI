@@ -1,6 +1,8 @@
 package org.dean.borrower.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.dean.borrower.enums.EquipmentCondition;
@@ -19,15 +21,22 @@ public class MaintenanceRecord {
     //equipmentId
     @ManyToOne
     @JoinColumn(name = "equipment_id")
+    @NotNull
     private Equipment equipment;
 
     //TechnicianId
     @ManyToOne
     @JoinColumn(name = "technician_id")
+    @NotNull
     private User technician;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private EquipmentCondition condition;
+
+    @NotBlank
     private String notes;
+
+    @NotNull
     private LocalDateTime createdAt;
 }

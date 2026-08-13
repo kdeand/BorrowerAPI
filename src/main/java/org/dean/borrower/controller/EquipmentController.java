@@ -1,5 +1,6 @@
 package org.dean.borrower.controller;
 
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.dean.borrower.entity.Equipment;
 import org.dean.borrower.repository.EquipmentRepository;
@@ -28,7 +29,7 @@ public class EquipmentController {
 
     //for the post method
     @PostMapping
-    public ResponseEntity<Equipment> createEquipment(@RequestBody Equipment equipment) {
+    public ResponseEntity<Equipment> createEquipment(@RequestBody @Valid Equipment equipment) {
         Equipment createdEquipment = equipmentService.createEquipment(equipment);
 
         return ResponseEntity.status(201).body(createdEquipment);
@@ -46,7 +47,7 @@ public class EquipmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Equipment> updateEquipment(@PathVariable Long id, @RequestBody Equipment equipment) {
+    public ResponseEntity<Equipment> updateEquipment(@PathVariable Long id, @RequestBody @Valid Equipment equipment) {
         Equipment updatedEquipment = equipmentService.updateEquipment(id, equipment);
 
         if(updatedEquipment == null) {

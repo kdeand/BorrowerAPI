@@ -1,6 +1,7 @@
 package org.dean.borrower.controller;
 
 import com.sun.tools.javac.Main;
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.dean.borrower.entity.MaintenanceRecord;
 import org.dean.borrower.service.MaintenanceRecordService;
@@ -25,7 +26,7 @@ public class MaintenanceRecordController {
     }
 
     @PostMapping
-    public ResponseEntity<MaintenanceRecord> createMaintenanceRecord(@RequestBody MaintenanceRecord maintenanceRecord) {
+    public ResponseEntity<MaintenanceRecord> createMaintenanceRecord(@RequestBody @Valid MaintenanceRecord maintenanceRecord) {
         MaintenanceRecord createdMaintenanceRecord = maintenanceRecordService.createMaintenanceRecord(maintenanceRecord);
         return ResponseEntity.status(201).body(createdMaintenanceRecord);
     }
@@ -42,7 +43,7 @@ public class MaintenanceRecordController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MaintenanceRecord> updateMaintenanceRecord(@PathVariable Long id, @RequestBody MaintenanceRecord maintenanceRecord) {
+    public ResponseEntity<MaintenanceRecord> updateMaintenanceRecord(@PathVariable Long id, @RequestBody @Valid MaintenanceRecord maintenanceRecord) {
         MaintenanceRecord updatedMaintenanceRecord = maintenanceRecordService.updateMaintenanceRecord(id, maintenanceRecord);
 
         if(updatedMaintenanceRecord == null) {
