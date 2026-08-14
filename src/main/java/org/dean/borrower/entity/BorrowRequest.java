@@ -21,8 +21,8 @@ public class BorrowRequest {
 
     //borrowerId
     @ManyToOne
-    @JoinColumn(name = "borrower_id")
-    @NotBlank
+    @JoinColumn(name = "borrower_id", nullable = false)
+    @NotNull
     private User borrower;
 
     @NotNull
@@ -32,10 +32,9 @@ public class BorrowRequest {
     private LocalDateTime borrowDate;
 
     @NotNull
-    @FutureOrPresent
     private LocalDateTime expectedReturnDate;
 
-    //it can be null because return date can be added lateron
+    //it can be null because return date can be added later on
     private LocalDateTime returnDate;
 
     @Enumerated(EnumType.STRING)

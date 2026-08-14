@@ -4,6 +4,8 @@ package org.dean.borrower.service;
 import org.dean.borrower.entity.Category;
 import org.dean.borrower.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
+import org.dean.borrower.dto.CategoryRequest;
+import org.dean.borrower.dto.CategoryResponse;
 
 import java.util.List;
 
@@ -16,29 +18,60 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryResponse> getAllCategories() {
+        return categoryRepository.findAll().stream().map(this::toResponse).toList();
     }
 
-    public Category createCategory(Category category) {
-        return categoryRepository.save(category);
+    private CategoryResponse toResponse(Category category) {
+        return new CategoryResponse(
+                category.getId(),
+                category.getName(),
+                category.getDescription()
+        );
     }
 
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElse(null);
+    //create
+    public CategoryResponse createCategory(CategoryRequest request) {
+
+        Category category = new Category();
+
+        category.setName(request.getName());
+        category.setDescription(request.getDescription());
+
+        Category savedCategory = categoryRepository.save(category);
+
+        return new CategoryResponse(
+                savedCategory.getId(),
+                savedCategory.getName(),
+                savedCategory.getDescription()
+        );
     }
 
-    public Category updateCategory (Long id, Category newCategory) {
+    //read one
+    public CategoryResponse getCategoryById(Long id) {
+
+        Category category =  categoryRepository.findById(id).orElse(null);
+
+        if(category == null) {
+            return null;
+        }
+
+        return toResponse(category);
+    }
+
+    //to update
+    public CategoryResponse updateCategory (Long id, CategoryRequest request) {
         //find the id
         Category existingCategory = categoryRepository.findById(id).orElse(null);
         if (existingCategory == null) {
             return null;
         }
 
-        existingCategory.setName(newCategory.getName());
-        existingCategory.setDescription(newCategory.getDescription());
+        existingCategory.setName(request.getName());
+        existingCategory.setDescription(request.getDescription());
 
-        return categoryRepository.save(existingCategory);
+        Category savedCategory = categoryRepository.save(existingCategory);
+        return toResponse(savedCategory);
     }
 
     //delete

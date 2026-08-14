@@ -1,8 +1,8 @@
 package org.dean.borrower.controller;
 
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
-import org.dean.borrower.entity.Category;
+import org.dean.borrower.dto.CategoryRequest;
+import org.dean.borrower.dto.CategoryResponse;
 import org.dean.borrower.service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,24 +20,27 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    //READ ALL
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategories() {
+    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
 
-        List<Category> categories =  categoryService.getAllCategories();
+        List<CategoryResponse> categories =  categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
 
+    //CREATE
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody @Valid Category category) {
+    public ResponseEntity<CategoryResponse> createCategory(@RequestBody @Valid CategoryRequest request) {
 
-        Category createdCategory = categoryService.createCategory(category);
+        CategoryResponse createdCategory = categoryService.createCategory(request);
 
         return ResponseEntity.status(201).body(createdCategory);
     }
 
+    //READ ONE
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        Category category = categoryService.getCategoryById(id);
+    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable Long id) {
+        CategoryResponse category = categoryService.getCategoryById(id);
 
         if(category == null) {
             return ResponseEntity.notFound().build();
@@ -46,12 +49,13 @@ public class CategoryController {
         return ResponseEntity.ok(category);
     }
 
+    //Update
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody @Valid Category category) {
-        Category updatedCategory = categoryService.updateCategory(id, category);
+    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id, @RequestBody @Valid CategoryRequest request) {
+        CategoryResponse updatedCategory = categoryService.updateCategory(id, request);
 
         if(updatedCategory == null) {
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(updatedCategory);
