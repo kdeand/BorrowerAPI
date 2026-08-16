@@ -1,8 +1,8 @@
 package org.dean.borrower.controller;
 
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
-import org.dean.borrower.entity.BorrowRequest;
+import org.dean.borrower.dto.BorrowRequestRequest;
+import org.dean.borrower.dto.BorrowRequestResponse;
 import org.dean.borrower.service.BorrowRequestService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,55 +10,92 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/borrow_requests")
+@RequestMapping("/api/borrow-requests")
 public class BorrowRequestController {
+
     private final BorrowRequestService borrowRequestService;
 
-    public BorrowRequestController(BorrowRequestService borrowRequestService) {
+    public BorrowRequestController(
+            BorrowRequestService borrowRequestService) {
+
         this.borrowRequestService = borrowRequestService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<BorrowRequest>> getAllBorrowRequests() {
 
-        List<BorrowRequest> borrowRequests = borrowRequestService.getAllBorrowRequests();
+    // GET ALL
+    @GetMapping
+    public ResponseEntity<List<BorrowRequestResponse>>
+    getAllBorrowRequests() {
+
+        List<BorrowRequestResponse> borrowRequests =
+                borrowRequestService.getAllBorrowRequests();
+
         return ResponseEntity.ok(borrowRequests);
     }
 
-    @PostMapping
-    public ResponseEntity<BorrowRequest> createBorrowRequest(@RequestBody @Valid BorrowRequest borrowRequest) {
-        BorrowRequest borrowRequests = borrowRequestService.createBorrowRequest(borrowRequest);
 
-        return ResponseEntity.status(201).body(borrowRequests);
-    }
-
+    // GET BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<BorrowRequest> getBorrowRequestById(@PathVariable Long id) {
-        BorrowRequest borrowRequest = borrowRequestService.getBorrowRequestById(id);
+    public ResponseEntity<BorrowRequestResponse>
+    getBorrowRequestById(@PathVariable Long id) {
 
-        if(borrowRequest == null) {
-            ResponseEntity.notFound().build();
+        BorrowRequestResponse borrowRequest =
+                borrowRequestService.getBorrowRequestById(id);
+
+        if (borrowRequest == null) {
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(borrowRequest);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<BorrowRequest> updateBorrowRequest(@PathVariable Long id, @RequestBody @Valid BorrowRequest borrowRequest) {
-        BorrowRequest updatedBorrowRequest = borrowRequestService.updateBorrowRequest(id, borrowRequest);
 
-        if(updatedBorrowRequest == null) {
-            ResponseEntity.notFound().build();
+    // CREATE
+    @PostMapping
+    public ResponseEntity<BorrowRequestResponse>
+    createBorrowRequest(
+            @Valid @RequestBody BorrowRequestRequest request) {
+
+        BorrowRequestResponse createdBorrowRequest =
+                borrowRequestService.createBorrowRequest(request);
+
+        if (createdBorrowRequest == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity
+                .status(201)
+                .body(createdBorrowRequest);
+    }
+
+
+    // UPDATE
+    @PutMapping("/{id}")
+    public ResponseEntity<BorrowRequestResponse>
+    updateBorrowRequest(
+            @PathVariable Long id,
+            @Valid @RequestBody BorrowRequestRequest request) {
+
+        BorrowRequestResponse updatedBorrowRequest =
+                borrowRequestService.updateBorrowRequest(id, request);
+
+        if (updatedBorrowRequest == null) {
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(updatedBorrowRequest);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBorrowRequest(@PathVariable Long id) {
 
-        boolean deleted = borrowRequestService.deleteBorrowRequest(id);
-        if(!deleted) {
+    // DELETE
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void>
+    deleteBorrowRequest(@PathVariable Long id) {
+
+        boolean deleted =
+                borrowRequestService.deleteBorrowRequest(id);
+
+        if (!deleted) {
             return ResponseEntity.notFound().build();
         }
 
