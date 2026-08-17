@@ -21,22 +21,17 @@ public class MaintenanceRecord {
     //equipmentId
     @ManyToOne
     @JoinColumn(name = "equipment_id")
-    @NotNull
     private Equipment equipment;
 
     //TechnicianId
     @ManyToOne
     @JoinColumn(name = "technician_id")
-    @NotNull
     private User technician;
 
     @Enumerated(EnumType.STRING)
-    @NotNull
     private EquipmentCondition condition;
 
-    @NotBlank
     private String notes;
 
-    @NotNull
     private LocalDateTime createdAt;
 }

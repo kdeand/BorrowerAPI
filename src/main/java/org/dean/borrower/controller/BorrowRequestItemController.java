@@ -1,62 +1,101 @@
 package org.dean.borrower.controller;
 
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
-import org.dean.borrower.entity.BorrowRequestItem;
+import org.dean.borrower.dto.BorrowRequestItemRequest;
+import org.dean.borrower.dto.BorrowRequestItemResponse;
 import org.dean.borrower.service.BorrowRequestItemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/api/borrow_request_item")
 @RestController
+@RequestMapping("/api/borrow_request_item")
 public class BorrowRequestItemController {
+
     private final BorrowRequestItemService borrowRequestItemService;
 
-    public BorrowRequestItemController(BorrowRequestItemService borrowRequestItemService) {
+    public BorrowRequestItemController(
+            BorrowRequestItemService borrowRequestItemService) {
+
         this.borrowRequestItemService = borrowRequestItemService;
     }
 
+
+    // GET ALL
     @GetMapping
-    public ResponseEntity<List<BorrowRequestItem>> getAllRequestItems() {
-        List<BorrowRequestItem> borrowRequestItems = borrowRequestItemService.getAllBorrowRequestItems();
+    public ResponseEntity<List<BorrowRequestItemResponse>>
+    getAllRequestItems() {
+
+        List<BorrowRequestItemResponse> borrowRequestItems =
+                borrowRequestItemService.getAllBorrowRequestItems();
+
         return ResponseEntity.ok(borrowRequestItems);
     }
 
+
+    // CREATE
     @PostMapping
-    public ResponseEntity<BorrowRequestItem> createBorrowRequestItem(@RequestBody @Valid BorrowRequestItem borrowRequestItem) {
-        BorrowRequestItem createdBorrowRequestItem =  borrowRequestItemService.createBorrowRequestItem(borrowRequestItem);
-        return ResponseEntity.status(201).body(createdBorrowRequestItem);
+    public ResponseEntity<BorrowRequestItemResponse>
+    createBorrowRequestItem(
+            @Valid @RequestBody BorrowRequestItemRequest request) {
+
+        BorrowRequestItemResponse createdBorrowRequestItem =
+                borrowRequestItemService.createBorrowRequestItem(request);
+
+        if (createdBorrowRequestItem == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity
+                .status(201)
+                .body(createdBorrowRequestItem);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BorrowRequestItem> getBorrowRequestItemById(@PathVariable Long id) {
-        BorrowRequestItem borrowRequestItem = borrowRequestItemService.getBorrowRequestItemById(id);
 
-        if(borrowRequestItem == null) {
-            ResponseEntity.notFound().build();
+    // GET BY ID
+    @GetMapping("/{id}")
+    public ResponseEntity<BorrowRequestItemResponse>
+    getBorrowRequestItemById(@PathVariable Long id) {
+
+        BorrowRequestItemResponse borrowRequestItem =
+                borrowRequestItemService.getBorrowRequestItemById(id);
+
+        if (borrowRequestItem == null) {
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(borrowRequestItem);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<BorrowRequestItem> updateBorrowRequestItem(@PathVariable Long id, @RequestBody @Valid BorrowRequestItem borrowRequestItem) {
 
-        BorrowRequestItem updatedBorrowRequestItem = borrowRequestItemService.updateBorrowRequestItem(id, borrowRequestItem);
-        if(updatedBorrowRequestItem == null) {
-            ResponseEntity.notFound().build();
+    // UPDATE
+    @PutMapping("/{id}")
+    public ResponseEntity<BorrowRequestItemResponse>
+    updateBorrowRequestItem(
+            @PathVariable Long id,
+            @Valid @RequestBody BorrowRequestItemRequest request) {
+
+        BorrowRequestItemResponse updatedBorrowRequestItem =
+                borrowRequestItemService.updateBorrowRequestItem(id, request);
+
+        if (updatedBorrowRequestItem == null) {
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(updatedBorrowRequestItem);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBorrowRequestItem(@PathVariable Long id) {
-        boolean deleted = borrowRequestItemService.deleteBorrowRequestItem(id);
 
-        if(!deleted) {
+    // DELETE
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void>
+    deleteBorrowRequestItem(@PathVariable Long id) {
+
+        boolean deleted =
+                borrowRequestItemService.deleteBorrowRequestItem(id);
+
+        if (!deleted) {
             return ResponseEntity.notFound().build();
         }
 

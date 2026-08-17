@@ -1,9 +1,8 @@
 package org.dean.borrower.controller;
 
-import com.sun.tools.javac.Main;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
-import org.dean.borrower.entity.MaintenanceRecord;
+import org.dean.borrower.dto.MaintenanceRecordRequest;
+import org.dean.borrower.dto.MaintenanceRecordResponse;
 import org.dean.borrower.service.MaintenanceRecordService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,54 +12,93 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/maintenance_record")
 public class MaintenanceRecordController {
+
     private final MaintenanceRecordService maintenanceRecordService;
 
-    public MaintenanceRecordController(MaintenanceRecordService maintenanceRecordService) {
+    public MaintenanceRecordController(
+            MaintenanceRecordService maintenanceRecordService) {
+
         this.maintenanceRecordService = maintenanceRecordService;
     }
 
+
+    // GET ALL
     @GetMapping
-    public ResponseEntity<List<MaintenanceRecord>> getAllMaintenanceRecords() {
-        List<MaintenanceRecord> maintenanceRecords = maintenanceRecordService.getAllMaintenanceRecords();
+    public ResponseEntity<List<MaintenanceRecordResponse>>
+    getAllMaintenanceRecords() {
+
+        List<MaintenanceRecordResponse> maintenanceRecords =
+                maintenanceRecordService.getAllMaintenanceRecords();
+
         return ResponseEntity.ok(maintenanceRecords);
     }
 
+
+    // CREATE
     @PostMapping
-    public ResponseEntity<MaintenanceRecord> createMaintenanceRecord(@RequestBody @Valid MaintenanceRecord maintenanceRecord) {
-        MaintenanceRecord createdMaintenanceRecord = maintenanceRecordService.createMaintenanceRecord(maintenanceRecord);
-        return ResponseEntity.status(201).body(createdMaintenanceRecord);
+    public ResponseEntity<MaintenanceRecordResponse>
+    createMaintenanceRecord(
+            @Valid @RequestBody MaintenanceRecordRequest request) {
+
+        MaintenanceRecordResponse createdMaintenanceRecord =
+                maintenanceRecordService.createMaintenanceRecord(request);
+
+        if (createdMaintenanceRecord == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity
+                .status(201)
+                .body(createdMaintenanceRecord);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MaintenanceRecord> getMaintenanceRecordById(@PathVariable Long id) {
-        MaintenanceRecord maintenanceRecord = maintenanceRecordService.getMaintenanceRecordById(id);
 
-        if(maintenanceRecord == null) {
-            ResponseEntity.notFound().build();
+    // GET BY ID
+    @GetMapping("/{id}")
+    public ResponseEntity<MaintenanceRecordResponse>
+    getMaintenanceRecordById(@PathVariable Long id) {
+
+        MaintenanceRecordResponse maintenanceRecord =
+                maintenanceRecordService.getMaintenanceRecordById(id);
+
+        if (maintenanceRecord == null) {
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(maintenanceRecord);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<MaintenanceRecord> updateMaintenanceRecord(@PathVariable Long id, @RequestBody @Valid MaintenanceRecord maintenanceRecord) {
-        MaintenanceRecord updatedMaintenanceRecord = maintenanceRecordService.updateMaintenanceRecord(id, maintenanceRecord);
 
-        if(updatedMaintenanceRecord == null) {
-            ResponseEntity.notFound().build();
+    // UPDATE
+    @PutMapping("/{id}")
+    public ResponseEntity<MaintenanceRecordResponse>
+    updateMaintenanceRecord(
+            @PathVariable Long id,
+            @Valid @RequestBody MaintenanceRecordRequest request) {
+
+        MaintenanceRecordResponse updatedMaintenanceRecord =
+                maintenanceRecordService.updateMaintenanceRecord(id, request);
+
+        if (updatedMaintenanceRecord == null) {
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(updatedMaintenanceRecord);
     }
 
+
+    // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMaintenanceRecord(@PathVariable Long id) {
-       boolean deleted = maintenanceRecordService.deleteMaintenanceRecord(id);
+    public ResponseEntity<Void>
+    deleteMaintenanceRecord(@PathVariable Long id) {
 
-       if(!deleted) {
-           return ResponseEntity.notFound().build();
-       }
+        boolean deleted =
+                maintenanceRecordService.deleteMaintenanceRecord(id);
 
-       return ResponseEntity.noContent().build();
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.noContent().build();
     }
 }

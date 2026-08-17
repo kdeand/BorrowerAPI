@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.dean.borrower.enums.EquipmentCondition;
+import org.dean.borrower.enums.EquipmentStatus;
 
 @Entity
 @Table(name = "equipment")
@@ -25,11 +27,13 @@ public class Equipment {
     @NotBlank
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @NotBlank
-    private String condition;
+    private EquipmentCondition condition;
 
+    @Enumerated(EnumType.STRING)
     @NotBlank
-    private String status;
+    private EquipmentStatus status;
 
     //category
     @NotNull

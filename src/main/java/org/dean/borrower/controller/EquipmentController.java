@@ -2,6 +2,8 @@ package org.dean.borrower.controller;
 
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
+import org.dean.borrower.dto.EquipmentRequest;
+import org.dean.borrower.dto.EquipmentResponse;
 import org.dean.borrower.entity.Equipment;
 import org.dean.borrower.repository.EquipmentRepository;
 import org.dean.borrower.service.EquipmentService;
@@ -20,24 +22,23 @@ public class EquipmentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Equipment>> getAllEquipments() {
+    public ResponseEntity<List<EquipmentResponse>> getAllEquipments() {
 
-        List<Equipment> equipments = equipmentService.getAllEquipments();
+        List<EquipmentResponse> equipments = equipmentService.getAllEquipments();
 
         return ResponseEntity.ok(equipments);
     }
 
     //for the post method
     @PostMapping
-    public ResponseEntity<Equipment> createEquipment(@RequestBody @Valid Equipment equipment) {
-        Equipment createdEquipment = equipmentService.createEquipment(equipment);
-
+    public ResponseEntity<EquipmentResponse> createEquipment(@RequestBody @Valid EquipmentRequest request) {
+        EquipmentResponse createdEquipment = equipmentService.createEquipment(request);
         return ResponseEntity.status(201).body(createdEquipment);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Equipment> getEquipmentById(@PathVariable Long id){
-        Equipment equipment = equipmentService.getEquipmentById(id);
+    public ResponseEntity<EquipmentResponse> getEquipmentById(@PathVariable Long id){
+        EquipmentResponse equipment = equipmentService.getEquipmentById(id);
 
         if(equipment == null) {
             return ResponseEntity.notFound().build();
@@ -47,8 +48,8 @@ public class EquipmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Equipment> updateEquipment(@PathVariable Long id, @RequestBody @Valid Equipment equipment) {
-        Equipment updatedEquipment = equipmentService.updateEquipment(id, equipment);
+    public ResponseEntity<EquipmentResponse> updateEquipment(@PathVariable Long id, @RequestBody @Valid EquipmentRequest request) {
+        EquipmentResponse updatedEquipment = equipmentService.updateEquipment(id, request);
 
         if(updatedEquipment == null) {
             return ResponseEntity.notFound().build();
@@ -59,7 +60,6 @@ public class EquipmentController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEquipment(@PathVariable Long id) {
-
         boolean deleted = equipmentService.deleteEquipment(id);
         if(!deleted) {
             return ResponseEntity.notFound().build();
