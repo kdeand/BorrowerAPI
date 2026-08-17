@@ -52,7 +52,6 @@ public class BorrowRequestService {
                 .toList();
     }
 
-
     // GET BY ID
     public BorrowRequestResponse getBorrowRequestById(Long id) {
 
@@ -84,7 +83,7 @@ public class BorrowRequestService {
         // expected return must be AFTER borrow date
         if (!request.getExpectedReturnDate()
                 .isAfter(request.getBorrowDate())) {
-
+        //exception
             throw new IllegalArgumentException(
                     "Expected return date must be after borrow date"
             );
@@ -126,6 +125,7 @@ public class BorrowRequestService {
             return null;
         }
 
+        //exception if expectedreturndate is before borrow date
         if (!request.getExpectedReturnDate()
                 .isAfter(request.getBorrowDate())) {
 
