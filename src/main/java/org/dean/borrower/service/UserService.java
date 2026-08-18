@@ -1,5 +1,7 @@
 package org.dean.borrower.service;
 
+import org.dean.borrower.dto.UserRequest;
+import org.dean.borrower.dto.UserResponse;
 import org.dean.borrower.entity.User;
 import org.dean.borrower.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -14,34 +16,72 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+
+        return userRepository.
+                findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    public UserResponse toResponse(User user) {
+        return new UserResponse(
+                user.getId(),
+                user.getFirstname(),
+                user.getLastname(),
+                user.getRole(),
+                user.getEmail()
+
+        );
     }
 
     //post
-    public User createUser(User user) {
-        return userRepository.save(user);
+    //create
+    public UserResponse createUser(UserRequest request) {
+        User user = new User();
+
+        user.setFirstname(request.getFirstname());
+        user.setLastname(request.getLastname());
+        user.setRole(request.getRole());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+
+        User savedUser = userRepository.save(user);
+
+        return toResponse(savedUser);
     }
 
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    //FindById
+    public UserResponse getUserById(Long id) {
+
+
+        User user = userRepository.findById(id).orElse(null);
+
+        if(user == null) {
+            return null;
+        }
+
+        return toResponse(user);
     }
 
-    public User updateUser(Long id, User newUser) {
+    public UserResponse updateUser(Long id, UserRequest request) {
+
         User existingUser = userRepository.findById(id).orElse(null);
 
         if (existingUser == null) {
             return null;
-
         }
 
-        existingUser.setFirstname(newUser.getFirstname());
-        existingUser.setLastname(newUser.getLastname());
-        existingUser.setRole(newUser.getRole());
-        existingUser.setEmail(newUser.getEmail());
-        existingUser.setPassword(newUser.getPassword());
+        existingUser.setFirstname(request.getFirstname());
+        existingUser.setLastname(request.getLastname());
+        existingUser.setRole(request.getRole());
+        existingUser.setEmail(request.getEmail());
+        existingUser.setPassword(request.getPassword());
 
-        return userRepository.save(newUser);
+        User savedUser = userRepository.save(existingUser);
+
+        return toResponse(savedUser);
 
     }
 

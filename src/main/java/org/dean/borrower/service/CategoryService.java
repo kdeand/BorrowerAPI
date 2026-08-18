@@ -41,11 +41,7 @@ public class CategoryService {
 
         Category savedCategory = categoryRepository.save(category);
 
-        return new CategoryResponse(
-                savedCategory.getId(),
-                savedCategory.getName(),
-                savedCategory.getDescription()
-        );
+        return toResponse(category);
     }
 
     //read one

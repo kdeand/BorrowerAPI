@@ -28,11 +28,11 @@ public class Equipment {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank
+    @NotNull
     private EquipmentCondition condition;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank
+    @NotNull
     private EquipmentStatus status;
 
     //category

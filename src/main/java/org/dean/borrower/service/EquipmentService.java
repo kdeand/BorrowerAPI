@@ -32,7 +32,7 @@ public class EquipmentService {
                 equipment.getAssetTag(),
                 equipment.getDescription(),
                 equipment.getCondition(),
-                equipment.getStatus(),
+                equipment.getStatus()       ,
                 equipment.getCategory().getId()
         );
 
@@ -68,7 +68,6 @@ public class EquipmentService {
         if (equipment == null) {
             return null;
         }
-
         return toResponse(equipment);
     }
 
@@ -95,18 +94,15 @@ public class EquipmentService {
         existingEquipment.setCategory(category);
 
         Equipment savedEquipment = equipmentRepository.save(existingEquipment);
-
         return toResponse(savedEquipment);
 
     }
 
     public boolean deleteEquipment(Long id) {
-
         if(equipmentRepository.existsById(id)){
             return false;
         }
         equipmentRepository.deleteById(id);
-
         return true;
     }
 }

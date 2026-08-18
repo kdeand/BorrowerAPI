@@ -20,10 +20,10 @@ public class EquipmentRequest {
     @NotBlank(message = "Description is required")
     private String description;
 
-    @NotBlank(message = "Condition is required")
+    @NotNull(message = "Condition is required")
     private EquipmentCondition condition;
 
-    @NotBlank(message = "Status is required")
+    @NotNull(message = "Status is required")
     private EquipmentStatus status;
 
     @NotNull(message = "Category is required")

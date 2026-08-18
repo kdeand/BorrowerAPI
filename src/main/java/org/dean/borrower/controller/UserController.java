@@ -2,6 +2,8 @@ package org.dean.borrower.controller;
 
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
+import org.dean.borrower.dto.UserRequest;
+import org.dean.borrower.dto.UserResponse;
 import org.dean.borrower.entity.User;
 import org.dean.borrower.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -18,24 +20,27 @@ public class UserController {
         this.userService = userService;
     }
 
+    //Get all users
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
 
-        List<User> users = userService.getAllUsers();
+        List<UserResponse> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
+    //Creating user
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
-        User createdUser = userService.createUser(user);
+    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest user) {
+        UserResponse createdUser = userService.createUser(user);
 
         return ResponseEntity.status(201).body(createdUser);
     }
 
+    //Read one
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
 
-        User user = userService.getUserById(id);
+        UserResponse user = userService.getUserById(id);
 
         if(user == null) {
             return ResponseEntity.notFound().build();
@@ -44,9 +49,10 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    //update
     @PostMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody @Valid User user) {
-        User updatedUser = userService.updateUser(id, user);
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest user) {
+        UserResponse updatedUser = userService.updateUser(id, user);
         if(updatedUser == null) {
             return ResponseEntity.notFound().build();
         }
@@ -54,6 +60,7 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    //delete
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         boolean deleted = userService.deleteUser(id);
