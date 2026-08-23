@@ -68,7 +68,7 @@ public class BorrowRequestService {
 
     // CREATE
     public BorrowRequestResponse createBorrowRequest(
-            BorrowRequestRequest request) {
+            BorrowRequestRequest request)  {
 
         // Find the User using borrowerId from the DTO
         User borrower = userRepository
@@ -134,6 +134,12 @@ public class BorrowRequestService {
             );
         }
 
+        //to update the borrower
+        User borrower = userRepository.findById(request.getBorrowerId()).orElse(null);
+        if(borrower == null) {
+            return null;
+        }
+
         existingBorrowRequest.setBorrowDate(
                 request.getBorrowDate()
         );
@@ -141,6 +147,8 @@ public class BorrowRequestService {
         existingBorrowRequest.setExpectedReturnDate(
                 request.getExpectedReturnDate()
         );
+
+        existingBorrowRequest.setBorrower(borrower);
 
         BorrowRequest savedBorrowRequest =
                 borrowRequestRepository.save(existingBorrowRequest);

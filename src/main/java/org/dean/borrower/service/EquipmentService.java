@@ -99,7 +99,7 @@ public class EquipmentService {
     }
 
     public boolean deleteEquipment(Long id) {
-        if(equipmentRepository.existsById(id)){
+        if(!equipmentRepository.existsById(id)){
             return false;
         }
         equipmentRepository.deleteById(id);

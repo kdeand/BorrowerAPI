@@ -24,6 +24,4 @@ public class MaintenanceRecordRequest {
 
     private String notes;
 
-    @NotNull
-    private LocalDateTime createdAt;
 }

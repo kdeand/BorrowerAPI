@@ -100,6 +100,7 @@ public class MaintenanceRecordService {
         // Set relationships
         maintenanceRecord.setEquipment(equipment);
         maintenanceRecord.setTechnician(technician);
+        maintenanceRecord.setCreatedAt(LocalDateTime.now());
 
         // Set request data
         maintenanceRecord.setCondition(request.getCondition());

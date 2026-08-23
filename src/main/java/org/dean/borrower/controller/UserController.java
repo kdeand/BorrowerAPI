@@ -50,7 +50,7 @@ public class UserController {
     }
 
     //update
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest user) {
         UserResponse updatedUser = userService.updateUser(id, user);
         if(updatedUser == null) {

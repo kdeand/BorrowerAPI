@@ -14,12 +14,6 @@ public class BorrowRequestItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String name;
-
-    @NotBlank
-    private String description;
-
     @ManyToOne
     @JoinColumn(name = "borrow_request_id")
     @NotNull
