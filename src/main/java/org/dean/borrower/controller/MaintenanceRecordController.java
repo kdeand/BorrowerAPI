@@ -3,6 +3,7 @@ package org.dean.borrower.controller;
 import jakarta.validation.Valid;
 import org.dean.borrower.dto.MaintenanceRecordRequest;
 import org.dean.borrower.dto.MaintenanceRecordResponse;
+import org.dean.borrower.entity.MaintenanceRecord;
 import org.dean.borrower.service.MaintenanceRecordService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -100,5 +101,46 @@ public class MaintenanceRecordController {
         }
 
         return ResponseEntity.noContent().build();
+    }
+
+    //METHODS
+
+    //equipmentgood
+    //equipmentbroken
+    //equipmentdamaged
+
+    @PutMapping("/{id}/good")
+    public ResponseEntity<MaintenanceRecordResponse> equipmentGood(@PathVariable Long id) {
+        MaintenanceRecordResponse response = maintenanceRecordService.equipmentGood(id);
+
+        if(response == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PutMapping("/{id}/broken")
+    public ResponseEntity<MaintenanceRecordResponse> equipmentBroken(@PathVariable Long id) {
+        MaintenanceRecordResponse response = maintenanceRecordService.equipmentBroken(id);
+
+        if(response == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PutMapping("/{id}/damaged")
+    public ResponseEntity<MaintenanceRecordResponse> equipmentDamaged(@PathVariable Long id) {
+        MaintenanceRecordResponse response = maintenanceRecordService.equipmentDamaged(id);
+
+        if(response == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(response);
     }
 }

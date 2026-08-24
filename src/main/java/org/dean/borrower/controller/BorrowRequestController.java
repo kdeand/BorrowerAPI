@@ -3,9 +3,11 @@ package org.dean.borrower.controller;
 import jakarta.validation.Valid;
 import org.dean.borrower.dto.BorrowRequestRequest;
 import org.dean.borrower.dto.BorrowRequestResponse;
+import org.dean.borrower.entity.BorrowRequest;
 import org.dean.borrower.service.BorrowRequestService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -100,5 +102,66 @@ public class BorrowRequestController {
         }
 
         return ResponseEntity.noContent().build();
+    }
+
+    //approve
+    @PutMapping("/{id}/approve")
+    public ResponseEntity<BorrowRequestResponse> approveBorrowRequest(
+            @PathVariable Long id) {
+
+        BorrowRequestResponse response =
+                borrowRequestService.approveBorrowRequest(id);
+
+        if (response == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/deny")
+    public ResponseEntity<BorrowRequestResponse> denyBorrowRequest(@PathVariable Long id) {
+        BorrowRequestResponse response =
+                borrowRequestService.denyBorrowRequest(id);
+
+        if(response == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<BorrowRequestResponse> cancelBorrowRequest(@PathVariable Long id) {
+        BorrowRequestResponse response = borrowRequestService.cancelBorrowRequest(id);
+
+        if(response == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/return")
+    public ResponseEntity<BorrowRequestResponse> returnBorrowRequest(@PathVariable Long id) {
+        BorrowRequestResponse response = borrowRequestService.returnBorrowRequest(id);
+
+        if(response == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PutMapping("/{id}/borrow")
+    public ResponseEntity<BorrowRequestResponse> borrowBorrowRequest(@PathVariable Long id) {
+        BorrowRequestResponse response = borrowRequestService.borrowBorrowRequest(id);
+
+        if(response == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(response);
     }
 }

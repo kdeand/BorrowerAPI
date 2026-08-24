@@ -26,7 +26,7 @@ public class BorrowRequestRequest {
     private LocalDateTime expectedReturnDate;
 
     @NotNull
-    private List<Long> EquipmentIds;
+    private List<Long> equipmentIds;
 }
 
 

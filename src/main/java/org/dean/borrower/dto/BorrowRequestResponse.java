@@ -26,5 +26,5 @@ public class BorrowRequestResponse {
 
     private BorrowRequestStatus status;
 
-    private List<Long> EquipmentIds;
+    private List<Long> equipmentIds;
 }
