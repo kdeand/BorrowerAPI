@@ -8,9 +8,11 @@
         : DTOS are working properly, with a few tweaks.
         : I don't think refurbishing is necessary, might just head on to documentation now.
 
-08-23-26: 
+08-23-26: Major changes
         : Updated crud is on-going.
         : Approval feature is done.
         : Conditions and statuses are configured upon creation of borrow requests
         : BorrowRequest services are finished
         : Maintenance records are configured, setting status and conditions and such.
+        : Controller mapping configured
+        : Testing undone
