@@ -16,3 +16,8 @@ Particularly:
 - [ ] Polish the API
 - [ ] Have control of the functionalities
 - [ ] Understand the whole system and the whole syntax
+
+# Daily TODO Lists
+
+08-24-2026
+- Updating status and conditions of entities when a user submits a request
