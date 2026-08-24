@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.dean.borrower.enums.BorrowRequestStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "borrow_requests")
@@ -41,4 +42,6 @@ public class BorrowRequest {
     @NotNull
     private BorrowRequestStatus status;
 
+    @NotNull
+    private List<Long> EquipmentIds;
 }

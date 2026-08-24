@@ -6,4 +6,7 @@
 
 08-23-26: Starting the refurbish.
         : DTOS are working properly, with a few tweaks.
-        : I don't think refurbishing is necessary, might just head on to documentation now. 
+        : I don't think refurbishing is necessary, might just head on to documentation now.
+
+08-23-26: 
+        : Updated crud is on-going.

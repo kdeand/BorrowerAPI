@@ -3,8 +3,12 @@ package org.dean.borrower.service;
 import org.dean.borrower.dto.BorrowRequestRequest;
 import org.dean.borrower.dto.BorrowRequestResponse;
 import org.dean.borrower.entity.BorrowRequest;
+import org.dean.borrower.entity.BorrowRequestItem;
+import org.dean.borrower.entity.Equipment;
 import org.dean.borrower.entity.User;
 import org.dean.borrower.enums.BorrowRequestStatus;
+import org.dean.borrower.enums.EquipmentStatus;
+import org.dean.borrower.repository.BorrowRequestItemRepository;
 import org.dean.borrower.repository.BorrowRequestRepository;
 import org.dean.borrower.repository.EquipmentRepository;
 import org.dean.borrower.repository.UserRepository;
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BorrowRequestService {
@@ -20,14 +25,16 @@ public class BorrowRequestService {
     private final BorrowRequestRepository borrowRequestRepository;
     private final UserRepository userRepository;
     private final EquipmentRepository equipmentRepository;
+    private final BorrowRequestItemRepository borrowRequestItemRepository;
 
     public BorrowRequestService(
             BorrowRequestRepository borrowRequestRepository,
-            UserRepository userRepository, EquipmentRepository equipmentRepository) {
+            UserRepository userRepository, EquipmentRepository equipmentRepository, BorrowRequestItemRepository borrowRequestItemRepository) {
 
         this.borrowRequestRepository = borrowRequestRepository;
         this.userRepository = userRepository;
         this.equipmentRepository = equipmentRepository;
+        this.borrowRequestItemRepository = borrowRequestItemRepository;
     }
 
 
@@ -42,7 +49,8 @@ public class BorrowRequestService {
                 borrowRequest.getBorrowDate(),
                 borrowRequest.getExpectedReturnDate(),
                 borrowRequest.getReturnDate(),
-                borrowRequest.getStatus()
+                borrowRequest.getStatus(),
+                borrowRequest.getEquipmentIds()
         );
     }
 
@@ -104,14 +112,37 @@ public class BorrowRequestService {
                 request.getExpectedReturnDate()
         );
 
+        borrowRequest.setEquipmentIds(request.getEquipmentIds());
+
+        //save the borrowRequestItems in the borrowRequestItems repository;
+
         // Server-controlled values
         borrowRequest.setRequestDate(LocalDateTime.now());
         borrowRequest.setReturnDate(null);
         borrowRequest.setStatus(BorrowRequestStatus.PENDING);
 
-        // Save Entity
         BorrowRequest savedBorrowRequest =
                 borrowRequestRepository.save(borrowRequest);
+
+        // Save Entity
+
+        for(Long equipmentId : request.getEquipmentIds()) {
+            //1. Find equipment, check id
+            Equipment eq = equipmentRepository.findById(equipmentId).orElse(null);
+
+
+            if (eq == null) {
+                return null;
+            }
+
+            //create an entity
+            BorrowRequestItem borrowRequestItem = new BorrowRequestItem();
+
+            borrowRequestItem.setEquipment(eq);
+            borrowRequestItem.setBorrowRequest(savedBorrowRequest);
+
+            borrowRequestItemRepository.save(borrowRequestItem);
+        }
 
         // Entity -> Response DTO
         return toResponse(savedBorrowRequest);
@@ -192,12 +223,30 @@ public class BorrowRequestService {
             return null;
         }
 
+        //get all items belonging in this request
+        List<BorrowRequestItem> items = borrowRequestItemRepository.findByBorrowRequestId(id);
+
+        //traverse to the list
+        for(BorrowRequestItem item : items) {
+            //getEquipmentIds
+            Equipment equipment = item.getEquipment();
+
+            if(equipment.getStatus() != EquipmentStatus.AVAILABLE) {
+                return null;
+            }
+
+            equipment.setStatus(EquipmentStatus.RESERVED);
+            equipmentRepository.save(equipment);
+        }
+
         //if valid:
 
         currentBorrowRequest.setStatus(BorrowRequestStatus.APPROVED);
+        //change equipment status to reserved
 
 
         BorrowRequest approvedBorrowRequest = borrowRequestRepository.save(currentBorrowRequest);
+
         return toResponse(approvedBorrowRequest);
     }
 
@@ -214,6 +263,22 @@ public class BorrowRequestService {
             return null;
         }
 
+        List<BorrowRequestItem> items = borrowRequestItemRepository.findByBorrowRequestId(id);
+
+        //traverse
+        for(BorrowRequestItem item : items) {
+            //check if item exists
+
+            Equipment equipment = item.getEquipment();
+
+            if(equipment.getStatus() != EquipmentStatus.RESERVED) {
+                return null;
+            }
+            //if it's borrowed
+            //set equipment status to borrowed
+
+            equipment.setStatus(EquipmentStatus.BORROWED);
+        }
         //if valid:
 
         currentBorrowRequest.setStatus(BorrowRequestStatus.BORROWED);
@@ -281,4 +346,6 @@ public class BorrowRequestService {
         BorrowRequest returnedBorrowRequest = borrowRequestRepository.save(currentBorrowRequest);
         return toResponse(returnedBorrowRequest);
     }
+
+    //RETURN PROCESS
 }

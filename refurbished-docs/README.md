@@ -8,3 +8,15 @@ I am done being a quitter.
 
 And thus, the recondition commences. 
 
+```
+List<BorrowRequestItem> items =
+borrowRequestItemRepository.findByBorrowRequestId(id);
+
+for (BorrowRequestItem item : items) {
+
+    Equipment equipment = item.getEquipment();
+
+    if (equipment.getStatus() != EquipmentStatus.AVAILABLE) {
+        return null;
+    }
+}```

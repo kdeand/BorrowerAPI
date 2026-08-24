@@ -23,4 +23,6 @@ public class BorrowRequestItem {
     @JoinColumn(name = "equipment_id")
     @NotNull
     private Equipment equipment;
+
+
 }

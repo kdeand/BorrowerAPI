@@ -2,9 +2,11 @@ package org.dean.borrower.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.dean.borrower.entity.BorrowRequestItem;
 import org.dean.borrower.enums.BorrowRequestStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -23,4 +25,6 @@ public class BorrowRequestResponse {
     private LocalDateTime returnDate;
 
     private BorrowRequestStatus status;
+
+    private List<Long> EquipmentIds;
 }
