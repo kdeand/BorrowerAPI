@@ -5,6 +5,8 @@ import org.dean.borrower.dto.MaintenanceRecordResponse;
 import org.dean.borrower.entity.Equipment;
 import org.dean.borrower.entity.MaintenanceRecord;
 import org.dean.borrower.entity.User;
+import org.dean.borrower.enums.EquipmentCondition;
+import org.dean.borrower.enums.EquipmentStatus;
 import org.dean.borrower.repository.EquipmentRepository;
 import org.dean.borrower.repository.MaintenanceRecordRepository;
 import org.dean.borrower.repository.UserRepository;
@@ -41,7 +43,8 @@ public class MaintenanceRecordService {
                 maintenanceRecord.getTechnician().getId(),
                 maintenanceRecord.getCondition(),
                 maintenanceRecord.getNotes(),
-                maintenanceRecord.getCreatedAt()
+                maintenanceRecord.getCreatedAt(),
+                maintenanceRecord.getCompletedAt()
         );
     }
 
@@ -113,9 +116,13 @@ public class MaintenanceRecordService {
         MaintenanceRecord savedMaintenanceRecord =
                 maintenanceRecordRepository.save(maintenanceRecord);
 
+        //equipment status set
+        equipment.setStatus(EquipmentStatus.MAINTENANCE);
+        equipment.setCondition(EquipmentCondition.UNDER_INSPECTION);
         // Entity -> Response DTO
         return toResponse(savedMaintenanceRecord);
     }
+
 
 
     // UPDATE
@@ -175,4 +182,91 @@ public class MaintenanceRecordService {
 
         return true;
     }
+
+
+    //equipment status ==========================================================================
+
+    //set equipment to be fixed
+    public MaintenanceRecordResponse equipmentGood(Long id) {
+        MaintenanceRecord maintenanceRecord = maintenanceRecordRepository.findById(id).orElse(null);
+
+        if(maintenanceRecord == null) {
+            return null;
+        }
+
+        if(maintenanceRecord.getCondition() != EquipmentCondition.UNDER_INSPECTION) {
+            return null;
+        }
+
+        Equipment equipment = maintenanceRecord.getEquipment();
+
+        equipment.setCondition(EquipmentCondition.GOOD);
+        equipment.setStatus(EquipmentStatus.AVAILABLE);
+        equipmentRepository.save(equipment);
+
+        //return value for maintenance.
+        maintenanceRecord.setNotes(maintenanceRecord.getNotes());
+        maintenanceRecord.setCompletedAt(LocalDateTime.now());
+        maintenanceRecord.setCondition(EquipmentCondition.GOOD);
+
+        MaintenanceRecord savedMaintenanceRecord = maintenanceRecordRepository.save(maintenanceRecord);
+        return toResponse(savedMaintenanceRecord);
+    }
+
+    //equipmentBroken
+    public MaintenanceRecordResponse equipmentBroken(Long id) {
+        MaintenanceRecord maintenanceRecord = maintenanceRecordRepository.findById(id).orElse(null);
+
+        if(maintenanceRecord == null) {
+            return null;
+        }
+
+        if(maintenanceRecord.getCondition() != EquipmentCondition.UNDER_INSPECTION) {
+            return null;
+        }
+
+        Equipment equipment = maintenanceRecord.getEquipment();
+
+        equipment.setCondition(EquipmentCondition.BROKEN);
+        equipment.setStatus(EquipmentStatus.ARCHIVED);
+        equipmentRepository.save(equipment);
+
+        maintenanceRecord.setCondition(EquipmentCondition.BROKEN);
+        //notes--- supposedly
+        maintenanceRecord.setCompletedAt(LocalDateTime.now());
+        //saved
+        MaintenanceRecord savedMaintenanceRecord = maintenanceRecordRepository.save(maintenanceRecord);
+        return toResponse(savedMaintenanceRecord);
+    }
+
+    //equipmentDAMAGED
+
+    public MaintenanceRecordResponse equipmentDamaged(Long id) {
+        MaintenanceRecord maintenanceRecord = maintenanceRecordRepository.findById(id).orElse(null);
+
+        if(maintenanceRecord == null) {
+            return null;
+        }
+
+        if(maintenanceRecord.getCondition() != EquipmentCondition.UNDER_INSPECTION) {
+            return null;
+        }
+
+        Equipment equipment = maintenanceRecord.getEquipment();
+
+        equipment.setCondition(EquipmentCondition.DAMAGED);
+        equipment.setStatus(EquipmentStatus.MAINTENANCE);
+        equipmentRepository.save(equipment);
+
+        maintenanceRecord.setCondition(EquipmentCondition.DAMAGED);
+
+        maintenanceRecord.setCompletedAt(LocalDateTime.now());
+
+        //saved
+        MaintenanceRecord savedMaintenanceRecord = maintenanceRecordRepository.save(maintenanceRecord);
+        return toResponse(savedMaintenanceRecord);
+    }
+
+
+
 }

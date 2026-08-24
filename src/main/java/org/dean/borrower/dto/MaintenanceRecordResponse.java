@@ -19,4 +19,6 @@ public class MaintenanceRecordResponse {
     private EquipmentCondition condition;
     private String notes;
     private LocalDateTime createdAt;
+    private LocalDateTime completedAt;
+
 }

@@ -201,7 +201,6 @@ public class BorrowRequestService {
         }
 
         borrowRequestRepository.deleteById(id);
-
         return true;
     }
 
@@ -337,6 +336,18 @@ public class BorrowRequestService {
         //grab the status from the borrowrequeststatus enum
         if (currentBorrowRequest.getStatus() != BorrowRequestStatus.BORROWED) {
             return null;
+        }
+
+        List<BorrowRequestItem> items = borrowRequestItemRepository.findByBorrowRequestId(id);
+
+        for(BorrowRequestItem item : items) {
+            Equipment equipment = item.getEquipment();
+            if(equipment == null) {
+                return null;
+            }
+
+            equipment.setStatus(EquipmentStatus.AVAILABLE);
+            equipmentRepository.save(equipment);
         }
 
 

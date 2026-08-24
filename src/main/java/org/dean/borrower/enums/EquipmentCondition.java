@@ -5,5 +5,5 @@ public enum EquipmentCondition {
     DAMAGED,
     GOOD,
     BROKEN,
-    UNDER_MAINTENANCE
+    UNDER_INSPECTION
 }

@@ -34,4 +34,6 @@ public class MaintenanceRecord {
     private String notes;
 
     private LocalDateTime createdAt;
+
+    private LocalDateTime completedAt;
 }
