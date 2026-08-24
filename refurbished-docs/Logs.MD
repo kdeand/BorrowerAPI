@@ -11,3 +11,6 @@
 08-23-26: 
         : Updated crud is on-going.
         : Approval feature is done.
+        : Conditions and statuses are configured upon creation of borrow requests
+        : BorrowRequest services are finished
+        : Maintenance records are configured, setting status and conditions and such.
