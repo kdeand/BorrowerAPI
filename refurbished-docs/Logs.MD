@@ -21,4 +21,5 @@
 
 08-25-26: Testing and Authorization
         : Testing done, all working
-        : Authentication will have to pause now. Have to consult with AI first i guess... 
+        : Authentication will have to pause now. Have to consult with AI first i guess...
+        : Implemented an override to Spring Security for now. 
