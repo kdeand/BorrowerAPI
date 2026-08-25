@@ -42,6 +42,13 @@ public class BorrowRequestService {
     //toResponse DTO
     private BorrowRequestResponse toResponse(BorrowRequest borrowRequest) {
 
+        List<Long> equipmentIds =
+                borrowRequestItemRepository
+                        .findByBorrowRequestId(borrowRequest.getId())
+                        .stream()
+                        .map(item -> item.getEquipment().getId())
+                        .toList();
+
         return new BorrowRequestResponse(
                 borrowRequest.getId(),
                 borrowRequest.getBorrower().getId(),
@@ -50,7 +57,7 @@ public class BorrowRequestService {
                 borrowRequest.getExpectedReturnDate(),
                 borrowRequest.getReturnDate(),
                 borrowRequest.getStatus(),
-                borrowRequest.getEquipmentIds()
+                equipmentIds
         );
     }
 
@@ -112,7 +119,7 @@ public class BorrowRequestService {
                 request.getExpectedReturnDate()
         );
 
-        borrowRequest.setEquipmentIds(request.getEquipmentIds());
+//        borrowRequest.setEquipmentIds(request.getEquipmentIds());
 
         //save the borrowRequestItems in the borrowRequestItems repository;
 
@@ -125,7 +132,7 @@ public class BorrowRequestService {
                 borrowRequestRepository.save(borrowRequest);
 
         // Save Entity
-
+        //for getting equipment ids and saving them to the borrow request item repository
         for(Long equipmentId : request.getEquipmentIds()) {
             //1. Find equipment, check id
             Equipment eq = equipmentRepository.findById(equipmentId).orElse(null);

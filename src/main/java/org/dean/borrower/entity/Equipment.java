@@ -42,6 +42,4 @@ public class Equipment {
     private Category category;
 
 
-
-
 }

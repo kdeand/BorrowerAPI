@@ -42,6 +42,4 @@ public class BorrowRequest {
     @NotNull
     private BorrowRequestStatus status;
 
-    @NotNull
-    private List<Long> EquipmentIds;
 }
