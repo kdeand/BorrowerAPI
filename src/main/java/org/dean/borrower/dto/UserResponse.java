@@ -10,8 +10,8 @@ import org.dean.borrower.enums.Role;
 @AllArgsConstructor
 public class UserResponse {
     private Long id;
-    private String firstname;
     private String lastname;
+    private String firstname;
     private Role role;
     private String email;
 }

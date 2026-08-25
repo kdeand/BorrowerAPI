@@ -21,4 +21,4 @@
 
 08-25-26: Testing and Authorization
         : Testing done, all working
-        : 
+        : Authentication will have to pause now. Have to consult with AI first i guess... 
