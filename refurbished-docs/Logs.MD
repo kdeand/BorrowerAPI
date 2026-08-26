@@ -28,3 +28,5 @@
         : Fixed Gradle issue
         : Signup testing is good
         : Login is built and tested
+        : Authentication Finished
+        : JWT Tokens configured, signing key done
