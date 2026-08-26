@@ -1,6 +1,7 @@
 package org.dean.borrower.Auth;
 
 import jakarta.validation.Valid;
+import org.dean.borrower.Auth.dto.LoginRequest;
 import org.dean.borrower.Auth.dto.SignupRequest;
 import org.dean.borrower.dto.UserResponse;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +26,16 @@ public class AuthController {
         }
 
         return ResponseEntity.status(201).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserResponse> login(@RequestBody @Valid LoginRequest request) {
+        UserResponse response = authService.login(request);
+
+        if(response == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(response);
     }
 }

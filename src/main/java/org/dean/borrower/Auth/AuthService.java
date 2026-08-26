@@ -1,5 +1,6 @@
 package org.dean.borrower.Auth;
 
+import org.dean.borrower.Auth.dto.LoginRequest;
 import org.dean.borrower.Auth.dto.SignupRequest;
 import org.dean.borrower.dto.UserResponse;
 import org.dean.borrower.entity.User;
@@ -51,8 +52,31 @@ public class AuthService {
         //password hashing
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         newUser.setPassword(hashedPassword);
-
         User user = userRepository.save(newUser);
+        return toResponse(user);
+    }
+
+    //login
+    public UserResponse login(LoginRequest request) {
+
+        //get email
+        //check if email exists
+        if(userRepository.findByEmail(request.getEmail()).isEmpty()) {
+            return null;
+        }
+
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+
+        if(user == null) {
+            return null;
+        }
+
+        //get user
+        boolean passwordMatches = passwordEncoder.matches(request.getPassword(), user.getPassword());
+
+        if(!passwordMatches) {
+            return null;
+        }
         return toResponse(user);
     }
 
