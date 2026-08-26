@@ -84,6 +84,7 @@ public class AuthService {
         //get token
         String token = jwtService.generateToken(user);
 
+        //return new loginResponse
         return new LoginResponse(
                 user.getId(),
                 user.getFirstname(),

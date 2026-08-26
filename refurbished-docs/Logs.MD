@@ -24,9 +24,10 @@
         : Authentication will have to pause now. Have to consult with AI first i guess...
         : Implemented an override to Spring Security for now. 
 
-08-26-26: Signup and Login
+08-26-26: Signup, Login, JWT Token
         : Fixed Gradle issue
         : Signup testing is good
         : Login is built and tested
         : Authentication Finished
         : JWT Tokens configured, signing key done
+        : JWTService injected to AuthService
