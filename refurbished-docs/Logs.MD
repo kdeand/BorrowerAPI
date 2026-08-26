@@ -27,3 +27,4 @@
 08-26-26: Signup and Login
         : Fixed Gradle issue
         : Signup testing is good
+        : Login is built and tested
