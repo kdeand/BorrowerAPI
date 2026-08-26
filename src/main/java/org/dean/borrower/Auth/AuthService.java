@@ -1,6 +1,8 @@
 package org.dean.borrower.Auth;
 
+import org.dean.borrower.Auth.dto.JwtService;
 import org.dean.borrower.Auth.dto.LoginRequest;
+import org.dean.borrower.Auth.dto.LoginResponse;
 import org.dean.borrower.Auth.dto.SignupRequest;
 import org.dean.borrower.dto.UserResponse;
 import org.dean.borrower.entity.User;
@@ -14,11 +16,13 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
 
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     //toresponse
@@ -57,7 +61,7 @@ public class AuthService {
     }
 
     //login
-    public UserResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
 
         //get email
         //check if email exists
@@ -73,11 +77,21 @@ public class AuthService {
 
         //get user
         boolean passwordMatches = passwordEncoder.matches(request.getPassword(), user.getPassword());
-
         if(!passwordMatches) {
             return null;
         }
-        return toResponse(user);
+
+        //get token
+        String token = jwtService.generateToken(user);
+
+        return new LoginResponse(
+                user.getId(),
+                user.getFirstname(),
+                user.getLastname(),
+                user.getRole(),
+                user.getEmail(),
+                token
+        );
     }
 
 }

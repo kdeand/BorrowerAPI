@@ -9,8 +9,8 @@ import org.dean.borrower.enums.Role;
 public class LoginResponse {
 
     private Long id;
-    private String firstname;
     private String lastname;
+    private String firstname;
     private Role role;
     private String email;
     private String token;
