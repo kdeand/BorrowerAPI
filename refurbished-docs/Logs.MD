@@ -23,3 +23,6 @@
         : Testing done, all working
         : Authentication will have to pause now. Have to consult with AI first i guess...
         : Implemented an override to Spring Security for now. 
+
+08-26-26: Signup and Login
+        : Fixed Gradle issue
