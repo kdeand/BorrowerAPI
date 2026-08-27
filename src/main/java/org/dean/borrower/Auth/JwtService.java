@@ -1,4 +1,4 @@
-package org.dean.borrower.Auth.dto;
+package org.dean.borrower.Auth;
 
 import org.dean.borrower.entity.User;
 import org.springframework.stereotype.Service;

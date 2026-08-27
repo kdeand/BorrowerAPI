@@ -1,6 +1,5 @@
 package org.dean.borrower.Auth;
 
-import org.dean.borrower.Auth.dto.JwtService;
 import org.dean.borrower.Auth.dto.LoginRequest;
 import org.dean.borrower.Auth.dto.LoginResponse;
 import org.dean.borrower.Auth.dto.SignupRequest;
