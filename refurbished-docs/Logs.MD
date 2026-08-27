@@ -31,3 +31,5 @@
         : Authentication Finished
         : JWT Tokens configured, signing key done
         : JWTService injected to AuthService
+
+08-27-26: JWT Parsing and Verification
