@@ -33,3 +33,6 @@
         : JWTService injected to AuthService
 
 08-27-26: JWT Parsing and Verification
+        : Parsing done
+        : Verification done
+        : JWT Filter starting
