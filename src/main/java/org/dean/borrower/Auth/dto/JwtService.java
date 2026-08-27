@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.Claims;
 
 @Service
 public class JwtService {
@@ -50,5 +51,43 @@ public class JwtService {
                 .signWith(getSigningKey())
                 //finalize
                 .compact();
+    }
+
+    //parse token
+    public Claims parseToken(String token) {
+        return Jwts.parser()
+                // Verify the JWT signature using our signing key.
+                // If verification FAILS, parsing throws an exception.
+                .verifyWith(getSigningKey())
+                //finish configure
+                .build()
+                //parse the token as a signed jwt containing claims
+                .parseSignedClaims(token)
+                //return claims gathered
+                .getPayload();
+    }
+
+    //get subject
+    public String extractEmail(String token) {
+        Claims claims = parseToken(token);
+        return claims.getSubject();
+
+    }
+
+    //is token expired
+    public boolean isTokenExpired(String token) {
+        Claims claims = parseToken(token);
+
+        return claims.getExpiration().before(new Date());
+    }
+
+    //is token valid
+    public boolean isTokenValid(String token, User user) {
+
+        //get token subject
+        String email = extractEmail(token);
+        //get user email
+        return email.equals(user.getEmail()) && !isTokenExpired(token);
+
     }
 }
