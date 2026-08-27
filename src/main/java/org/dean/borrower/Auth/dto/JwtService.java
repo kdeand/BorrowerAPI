@@ -1,7 +1,6 @@
 package org.dean.borrower.Auth.dto;
 
 import org.dean.borrower.entity.User;
-import org.dean.borrower.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -13,11 +12,6 @@ import io.jsonwebtoken.Claims;
 
 @Service
 public class JwtService {
-    private final UserRepository userRepository;
-
-    public JwtService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     //declare secret_key
     private static final String SECRET_KEY =
