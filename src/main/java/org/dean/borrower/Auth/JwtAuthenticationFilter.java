@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.dean.borrower.entity.User;
 import org.dean.borrower.repository.UserRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -37,5 +38,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authHeader.substring(7);
 
         //extract email from the token
+        String email = jwtService.extractEmail(token);
+
+        //get user from the repository
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if(user == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        //check if token is valid
+        if(!jwtService.isTokenExpired(token)){
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
+
+
     }
 }
