@@ -10,7 +10,6 @@ import org.dean.borrower.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -54,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         //check if token is valid
-        if(!jwtService.isTokenExpired(token)){
+        if(jwtService.isTokenExpired(token)){
             filterChain.doFilter(request, response);
             return;
         }
