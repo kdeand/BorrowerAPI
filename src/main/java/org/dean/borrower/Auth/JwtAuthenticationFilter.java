@@ -7,10 +7,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.dean.borrower.entity.User;
 import org.dean.borrower.repository.UserRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -54,8 +59,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        //to know who is authenticated, create an object
 
+        //create the simple granted authorities list
+        List<SimpleGrantedAuthority> authorities =
+                List.of(
+                        new SimpleGrantedAuthority(
+                                "ROLE_ "+ user.getRole().name()
+                        )
+                );
 
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(
+                        user,
+                        null,
+                        authorities
+                );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        filterChain.doFilter(request, response);
 
     }
 }
