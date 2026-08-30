@@ -6,6 +6,7 @@ import org.dean.borrower.dto.BorrowRequestResponse;
 import org.dean.borrower.entity.BorrowRequest;
 import org.dean.borrower.service.BorrowRequestService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -90,6 +91,7 @@ public class BorrowRequestController {
 
 
     // DELETE
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
     deleteBorrowRequest(@PathVariable Long id) {
@@ -105,6 +107,7 @@ public class BorrowRequestController {
     }
 
     //approve
+    @PreAuthorize("hasRole('Admin')")
     @PutMapping("/{id}/approve")
     public ResponseEntity<BorrowRequestResponse> approveBorrowRequest(
             @PathVariable Long id) {

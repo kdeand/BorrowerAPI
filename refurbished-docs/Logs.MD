@@ -44,3 +44,5 @@
         : Get jwt header
         : Let system know who is user
 
+08-30-26: Protect Authorizations
+
