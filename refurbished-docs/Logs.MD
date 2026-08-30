@@ -21,7 +21,7 @@
 
 08-25-26: Testing and Authorization
         : Testing done, all working
-        : Authentication will have to pause now. Have to consult with AI first i guess...
+        : Authentication will have to pause now. Have to consult with AI first 
         : Implemented an override to Spring Security for now. 
 
 08-26-26: Signup, Login, JWT Token
@@ -44,5 +44,6 @@
         : Get jwt header
         : Let system know who is user
 
-08-30-26: Protect Authorizations
+08-30-26: Authentication Polishing
+        : 
 

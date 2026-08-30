@@ -8,10 +8,13 @@ import org.dean.borrower.entity.Equipment;
 import org.dean.borrower.entity.User;
 import org.dean.borrower.enums.BorrowRequestStatus;
 import org.dean.borrower.enums.EquipmentStatus;
+import org.dean.borrower.enums.Role;
 import org.dean.borrower.repository.BorrowRequestItemRepository;
 import org.dean.borrower.repository.BorrowRequestRepository;
 import org.dean.borrower.repository.EquipmentRepository;
 import org.dean.borrower.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,6 +29,7 @@ public class BorrowRequestService {
     private final UserRepository userRepository;
     private final EquipmentRepository equipmentRepository;
     private final BorrowRequestItemRepository borrowRequestItemRepository;
+
 
     public BorrowRequestService(
             BorrowRequestRepository borrowRequestRepository,
@@ -312,9 +316,15 @@ public class BorrowRequestService {
         return toResponse(deniedBorrowRequest);
     }
 
+
+    //get specific User
+
     //cancel borrowRequest
     public BorrowRequestResponse cancelBorrowRequest(Long id) {
         BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElse(null);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
 
         if (currentBorrowRequest == null) {
             return null;
@@ -325,6 +335,25 @@ public class BorrowRequestService {
         if (currentBorrowRequest.getStatus() != BorrowRequestStatus.PENDING && currentBorrowRequest.getStatus() != BorrowRequestStatus.APPROVED) {
             return null;
         }
+
+
+        assert authentication != null;
+        User currentUser = (User) authentication.getPrincipal();
+
+        //after finding the request, get the current user
+        // If NOT admin, user must own the request
+        assert currentUser != null;
+        if (currentUser.getRole() != Role.ADMIN) {
+
+            if (!currentBorrowRequest
+                    .getBorrower()
+                    .getId()
+                    .equals(currentUser.getId())) {
+
+                return null;
+            }
+        }
+
 
         //if valid:
         currentBorrowRequest.setStatus(BorrowRequestStatus.CANCELLED);

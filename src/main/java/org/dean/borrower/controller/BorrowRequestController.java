@@ -107,7 +107,7 @@ public class BorrowRequestController {
     }
 
     //approve
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/approve")
     public ResponseEntity<BorrowRequestResponse> approveBorrowRequest(
             @PathVariable Long id) {
@@ -122,6 +122,7 @@ public class BorrowRequestController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/deny")
     public ResponseEntity<BorrowRequestResponse> denyBorrowRequest(@PathVariable Long id) {
         BorrowRequestResponse response =
@@ -134,6 +135,7 @@ public class BorrowRequestController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'BORROWER')")
     @PutMapping("/{id}/cancel")
     public ResponseEntity<BorrowRequestResponse> cancelBorrowRequest(@PathVariable Long id) {
         BorrowRequestResponse response = borrowRequestService.cancelBorrowRequest(id);
@@ -145,6 +147,7 @@ public class BorrowRequestController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/return")
     public ResponseEntity<BorrowRequestResponse> returnBorrowRequest(@PathVariable Long id) {
         BorrowRequestResponse response = borrowRequestService.returnBorrowRequest(id);
@@ -156,7 +159,7 @@ public class BorrowRequestController {
         return ResponseEntity.ok(response);
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/borrow")
     public ResponseEntity<BorrowRequestResponse> borrowBorrowRequest(@PathVariable Long id) {
         BorrowRequestResponse response = borrowRequestService.borrowBorrowRequest(id);

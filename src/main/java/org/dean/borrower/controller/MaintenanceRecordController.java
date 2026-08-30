@@ -6,6 +6,7 @@ import org.dean.borrower.dto.MaintenanceRecordResponse;
 import org.dean.borrower.entity.MaintenanceRecord;
 import org.dean.borrower.service.MaintenanceRecordService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -109,6 +110,7 @@ public class MaintenanceRecordController {
     //equipmentbroken
     //equipmentdamaged
 
+    @PreAuthorize("hasRole('TECHNICIAN')")
     @PutMapping("/{id}/good")
     public ResponseEntity<MaintenanceRecordResponse> equipmentGood(@PathVariable Long id) {
         MaintenanceRecordResponse response = maintenanceRecordService.equipmentGood(id);
@@ -120,7 +122,7 @@ public class MaintenanceRecordController {
         return ResponseEntity.ok(response);
     }
 
-
+    @PreAuthorize("hasRole('TECHNICIAN')")
     @PutMapping("/{id}/broken")
     public ResponseEntity<MaintenanceRecordResponse> equipmentBroken(@PathVariable Long id) {
         MaintenanceRecordResponse response = maintenanceRecordService.equipmentBroken(id);
@@ -133,6 +135,7 @@ public class MaintenanceRecordController {
     }
 
 
+    @PreAuthorize("hasRole('TECHNICIAN')")
     @PutMapping("/{id}/damaged")
     public ResponseEntity<MaintenanceRecordResponse> equipmentDamaged(@PathVariable Long id) {
         MaintenanceRecordResponse response = maintenanceRecordService.equipmentDamaged(id);
