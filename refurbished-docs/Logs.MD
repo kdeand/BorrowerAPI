@@ -45,5 +45,8 @@
         : Let system know who is user
 
 08-30-26: Authentication Polishing
-        : 
+        :
+
+08-31-26: Study
+        : JWT Authentication Service
 
