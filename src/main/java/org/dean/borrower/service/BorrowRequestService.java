@@ -1,5 +1,4 @@
 package org.dean.borrower.service;
-
 import org.dean.borrower.dto.BorrowRequestRequest;
 import org.dean.borrower.dto.BorrowRequestResponse;
 import org.dean.borrower.entity.BorrowRequest;
@@ -19,11 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BorrowRequestService {
-
 
     private final BorrowRequestRepository borrowRequestRepository;
     private final UserRepository userRepository;
@@ -41,6 +38,12 @@ public class BorrowRequestService {
         this.borrowRequestItemRepository = borrowRequestItemRepository;
     }
 
+    private User getCurrentUser() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        return (User) authentication.getPrincipal();
+    }
 
     // ENTITY -> RESPONSE DTO
     //toResponse DTO
@@ -67,7 +70,9 @@ public class BorrowRequestService {
 
 
     // GET ALL
+    //
     public List<BorrowRequestResponse> getAllBorrowRequests() {
+
 
         return borrowRequestRepository
                 .findAll()
@@ -94,14 +99,9 @@ public class BorrowRequestService {
     public BorrowRequestResponse createBorrowRequest(
             BorrowRequestRequest request)  {
 
-        // Find the User using borrowerId from the DTO
-        User borrower = userRepository
-                .findById(request.getBorrowerId())
-                .orElse(null);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (borrower == null) {
-            return null;
-        }
+        User currentUser = (User)authentication.getPrincipal();
 
         // Business rule:
         // expected return must be AFTER borrow date
@@ -117,7 +117,7 @@ public class BorrowRequestService {
         BorrowRequest borrowRequest = new BorrowRequest();
 
         // Client-controlled values
-        borrowRequest.setBorrower(borrower);
+        borrowRequest.setBorrower(currentUser);
         borrowRequest.setBorrowDate(request.getBorrowDate());
         borrowRequest.setExpectedReturnDate(
                 request.getExpectedReturnDate()
@@ -236,21 +236,26 @@ public class BorrowRequestService {
         //get all items belonging in this request
         List<BorrowRequestItem> items = borrowRequestItemRepository.findByBorrowRequestId(id);
 
+
+        for(BorrowRequestItem item: items) {
+            Equipment equipment = item.getEquipment();
+            if(equipment.getStatus() != EquipmentStatus.AVAILABLE) {
+                return null;
+            }
+        }
+
         //traverse to the list
         for(BorrowRequestItem item : items) {
             //getEquipmentIds
             Equipment equipment = item.getEquipment();
 
-            if(equipment.getStatus() != EquipmentStatus.AVAILABLE) {
-                return null;
-            }
-
             equipment.setStatus(EquipmentStatus.RESERVED);
             equipmentRepository.save(equipment);
         }
 
-        //if valid:
 
+        //if valid:
+            //getEquipmentIds
         currentBorrowRequest.setStatus(BorrowRequestStatus.APPROVED);
         //change equipment status to reserved
 
@@ -324,8 +329,7 @@ public class BorrowRequestService {
         BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElse(null);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-
-
+        //authroize
         if (currentBorrowRequest == null) {
             return null;
         }
@@ -337,23 +341,21 @@ public class BorrowRequestService {
         }
 
 
-        assert authentication != null;
-        User currentUser = (User) authentication.getPrincipal();
+
+        User currentUser = (User)authentication.getPrincipal();
 
         //after finding the request, get the current user
         // If NOT admin, user must own the request
-        assert currentUser != null;
-        if (currentUser.getRole() != Role.ADMIN) {
 
+        if (currentUser.getRole() != Role.ADMIN) {
             if (!currentBorrowRequest
                     .getBorrower()
                     .getId()
-                    .equals(currentUser.getId())) {
+                    .equals(currentUser.getId())) { //current user equals to User currentUser = (User)authentication.getPrincipal();
 
                 return null;
             }
         }
-
 
         //if valid:
         currentBorrowRequest.setStatus(BorrowRequestStatus.CANCELLED);
