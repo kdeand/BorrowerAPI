@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         //check if token is valid
-        if(jwtService.isTokenExpired(token)){
+        if(!jwtService.isTokenValid(token, user)){
             filterChain.doFilter(request, response);
             return;
         }
