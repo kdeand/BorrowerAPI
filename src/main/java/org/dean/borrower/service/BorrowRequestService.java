@@ -73,9 +73,20 @@ public class BorrowRequestService {
     //
     public List<BorrowRequestResponse> getAllBorrowRequests() {
 
+        User currentUser = getCurrentUser();
+
+
+
+        if(currentUser.getRole() == Role.ADMIN) {
+            return borrowRequestRepository
+                    .findAll()
+                    .stream()
+                    .map(this::toResponse)
+                    .toList();
+        }
 
         return borrowRequestRepository
-                .findAll()
+                .findByBorrowerId(currentUser.getId())
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -84,6 +95,8 @@ public class BorrowRequestService {
     // GET BY ID
     public BorrowRequestResponse getBorrowRequestById(Long id) {
 
+        User currentUser = getCurrentUser();
+
         BorrowRequest borrowRequest =
                 borrowRequestRepository.findById(id).orElse(null);
 
@@ -91,7 +104,17 @@ public class BorrowRequestService {
             return null;
         }
 
+        if(currentUser.getRole() == Role.ADMIN) {
+            return toResponse(borrowRequest);
+        }
+
+        if(!borrowRequest.getBorrower().getId().equals(currentUser.getId())) {
+            return null;
+        }
+
         return toResponse(borrowRequest);
+
+
     }
 
 
@@ -101,7 +124,7 @@ public class BorrowRequestService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User currentUser = (User)authentication.getPrincipal();
+        User currentUser = getCurrentUser();
 
         // Business rule:
         // expected return must be AFTER borrow date
@@ -161,9 +184,12 @@ public class BorrowRequestService {
 
 
     // UPDATE
+    //Redundant
     public BorrowRequestResponse updateBorrowRequest(
             Long id,
             BorrowRequestRequest request) {
+
+        User currentUser = getCurrentUser();
 
         BorrowRequest existingBorrowRequest =
                 borrowRequestRepository.findById(id).orElse(null);
@@ -171,6 +197,18 @@ public class BorrowRequestService {
         if (existingBorrowRequest == null) {
             return null;
         }
+
+    //Ownership first
+        if(currentUser.getRole() != Role.ADMIN) {
+            if (!existingBorrowRequest
+                    .getBorrower()
+                    .getId()
+                    .equals(currentUser.getId())) { //current user equals to User currentUser = (User)authentication.getPrincipal();
+
+                return null;
+            }
+        }
+
 
         //exception if expectedreturndate is before borrow date
         if (!request.getExpectedReturnDate()
@@ -182,10 +220,6 @@ public class BorrowRequestService {
         }
 
         //to update the borrower
-        User borrower = userRepository.findById(request.getBorrowerId()).orElse(null);
-        if(borrower == null) {
-            return null;
-        }
 
         existingBorrowRequest.setBorrowDate(
                 request.getBorrowDate()
@@ -195,12 +229,11 @@ public class BorrowRequestService {
                 request.getExpectedReturnDate()
         );
 
-        existingBorrowRequest.setBorrower(borrower);
-
         BorrowRequest savedBorrowRequest =
                 borrowRequestRepository.save(existingBorrowRequest);
 
         return toResponse(savedBorrowRequest);
+
     }
 
 
@@ -327,7 +360,6 @@ public class BorrowRequestService {
     //cancel borrowRequest
     public BorrowRequestResponse cancelBorrowRequest(Long id) {
         BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElse(null);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         //authroize
         if (currentBorrowRequest == null) {
@@ -340,9 +372,7 @@ public class BorrowRequestService {
             return null;
         }
 
-
-
-        User currentUser = (User)authentication.getPrincipal();
+        User currentUser = getCurrentUser();
 
         //after finding the request, get the current user
         // If NOT admin, user must own the request

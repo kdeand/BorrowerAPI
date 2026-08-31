@@ -49,4 +49,5 @@
 
 08-31-26: Study
         : JWT Authentication Service
+        : Provided proper authentication per borrow request method
 
