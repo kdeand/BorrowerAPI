@@ -55,6 +55,7 @@ public class BorrowRequestController {
 
     // CREATE
     @PostMapping
+    @PreAuthorize("hasAnyRole('BORROWER', 'ADMIN')")
     public ResponseEntity<BorrowRequestResponse>
     createBorrowRequest(
             @Valid @RequestBody BorrowRequestRequest request) {
