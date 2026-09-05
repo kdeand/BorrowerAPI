@@ -26,8 +26,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
-
     //bean to override any security measures for now
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -42,6 +40,5 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class
                 );
         return httpSecurity.build();
-
     }
 }
