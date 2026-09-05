@@ -11,8 +11,6 @@ import java.util.List;
 @Setter
 public class BorrowRequestRequest {
 
-    @NotNull(message = "Borrower ID is required")
-    private Long borrowerId;
 
     @NotNull(message = "Borrow date is required")
     @FutureOrPresent(message = "Borrow date can not be in the past")
