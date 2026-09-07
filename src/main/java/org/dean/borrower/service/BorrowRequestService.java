@@ -8,6 +8,7 @@ import org.dean.borrower.entity.User;
 import org.dean.borrower.enums.BorrowRequestStatus;
 import org.dean.borrower.enums.EquipmentStatus;
 import org.dean.borrower.enums.Role;
+import org.dean.borrower.exception.ResourceNotFoundException;
 import org.dean.borrower.repository.BorrowRequestItemRepository;
 import org.dean.borrower.repository.BorrowRequestRepository;
 import org.dean.borrower.repository.EquipmentRepository;
@@ -75,8 +76,6 @@ public class BorrowRequestService {
 
         User currentUser = getCurrentUser();
 
-
-
         if(currentUser.getRole() == Role.ADMIN) {
             return borrowRequestRepository
                     .findAll()
@@ -97,12 +96,13 @@ public class BorrowRequestService {
 
         User currentUser = getCurrentUser();
 
+        //exception
         BorrowRequest borrowRequest =
-                borrowRequestRepository.findById(id).orElse(null);
-
-        if (borrowRequest == null) {
-            return null;
-        }
+                borrowRequestRepository.findById(id).orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Borrow request not found with this id: " + id
+                        )
+                );
 
         if(currentUser.getRole() == Role.ADMIN) {
             return toResponse(borrowRequest);
@@ -121,8 +121,6 @@ public class BorrowRequestService {
     // CREATE
     public BorrowRequestResponse createBorrowRequest(
             BorrowRequestRequest request)  {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         User currentUser = getCurrentUser();
 
@@ -162,12 +160,11 @@ public class BorrowRequestService {
         //for getting equipment ids and saving them to the borrow request item repository
         for(Long equipmentId : request.getEquipmentIds()) {
             //1. Find equipment, check id
-            Equipment eq = equipmentRepository.findById(equipmentId).orElse(null);
-
-
-            if (eq == null) {
-                return null;
-            }
+            Equipment eq = equipmentRepository.findById(equipmentId).orElseThrow(() ->
+                    new ResourceNotFoundException(
+                            "Equipment not found with this id: " + equipmentId
+                    )
+            );
 
             //create an entity
             BorrowRequestItem borrowRequestItem = new BorrowRequestItem();
@@ -192,11 +189,11 @@ public class BorrowRequestService {
         User currentUser = getCurrentUser();
 
         BorrowRequest existingBorrowRequest =
-                borrowRequestRepository.findById(id).orElse(null);
-
-        if (existingBorrowRequest == null) {
-            return null;
-        }
+                borrowRequestRepository.findById(id).orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Borrow request not found with this id: " + id
+                        )
+                );
 
     //Ownership first
         if(currentUser.getRole() != Role.ADMIN) {
@@ -255,11 +252,11 @@ public class BorrowRequestService {
         //1. Get borrow request ID check if it exists
         //3. if it is pending
 
-        BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElse(null);
-
-        if (currentBorrowRequest == null) {
-            return null;
-        }
+        BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(
+                        "Borrow request not found with this id: " + id
+                )
+        );
 
         //grab the status from the borrowrequeststatus enum
         if (currentBorrowRequest.getStatus() != BorrowRequestStatus.PENDING) {
@@ -300,11 +297,11 @@ public class BorrowRequestService {
 
     //BORROWED
     public BorrowRequestResponse borrowBorrowRequest(Long id) {
-        BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElse(null);
-
-        if (currentBorrowRequest == null) {
-            return null;
-        }
+        BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(
+                        "Borrow request not found with this id: " + id
+                )
+        );
 
         //grab the status from the borrowrequeststatus enum
         if (currentBorrowRequest.getStatus() != BorrowRequestStatus.APPROVED) {
@@ -337,11 +334,12 @@ public class BorrowRequestService {
     }
     //DENY
     public BorrowRequestResponse denyBorrowRequest(Long id) {
-        BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElse(null);
+        BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(
+                        "Borrow request not found with this id: " + id
+                )
+        );
 
-        if (currentBorrowRequest == null) {
-            return null;
-        }
 
         //grab the status from the borrowrequeststatus enum
         if (currentBorrowRequest.getStatus() != BorrowRequestStatus.PENDING) {
@@ -359,12 +357,11 @@ public class BorrowRequestService {
 
     //cancel borrowRequest
     public BorrowRequestResponse cancelBorrowRequest(Long id) {
-        BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElse(null);
-
-        //authroize
-        if (currentBorrowRequest == null) {
-            return null;
-        }
+        BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(
+                        "Borrow request not found with this id: " + id
+                )
+        );
 
         //grab the status from the borrowrequeststatus enum
         //cant cancel if it's already returned, borrowed, or denied
@@ -395,11 +392,12 @@ public class BorrowRequestService {
 
     //RETURN
     public BorrowRequestResponse returnBorrowRequest(Long id) {
-        BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElse(null);
+        BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(
+                        "Borrow request not found with this id: " + id
+                )
+        );
 
-        if (currentBorrowRequest == null) {
-            return null;
-        }
 
         //grab the status from the borrowrequeststatus enum
         if (currentBorrowRequest.getStatus() != BorrowRequestStatus.BORROWED) {
@@ -410,6 +408,7 @@ public class BorrowRequestService {
 
         for(BorrowRequestItem item : items) {
             Equipment equipment = item.getEquipment();
+
             if(equipment == null) {
                 return null;
             }

@@ -113,14 +113,8 @@ public class BorrowRequestController {
     public ResponseEntity<BorrowRequestResponse> approveBorrowRequest(
             @PathVariable Long id) {
 
-        BorrowRequestResponse response =
-                borrowRequestService.approveBorrowRequest(id);
+        return ResponseEntity.ok(borrowRequestService.getBorrowRequestById(id));
 
-        if (response == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
