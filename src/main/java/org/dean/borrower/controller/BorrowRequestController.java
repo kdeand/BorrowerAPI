@@ -20,7 +20,6 @@ public class BorrowRequestController {
 
     public BorrowRequestController(
             BorrowRequestService borrowRequestService) {
-
         this.borrowRequestService = borrowRequestService;
     }
 
@@ -29,11 +28,7 @@ public class BorrowRequestController {
     @GetMapping
     public ResponseEntity<List<BorrowRequestResponse>>
     getAllBorrowRequests() {
-
-        List<BorrowRequestResponse> borrowRequests =
-                borrowRequestService.getAllBorrowRequests();
-
-        return ResponseEntity.ok(borrowRequests);
+        return ResponseEntity.ok(borrowRequestService.getAllBorrowRequests());
     }
 
 
@@ -41,15 +36,7 @@ public class BorrowRequestController {
     @GetMapping("/{id}")
     public ResponseEntity<BorrowRequestResponse>
     getBorrowRequestById(@PathVariable Long id) {
-
-        BorrowRequestResponse borrowRequest =
-                borrowRequestService.getBorrowRequestById(id);
-
-        if (borrowRequest == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(borrowRequest);
+        return ResponseEntity.ok(borrowRequestService.getBorrowRequestById(id));
     }
 
 
@@ -60,18 +47,10 @@ public class BorrowRequestController {
     createBorrowRequest(
             @Valid @RequestBody BorrowRequestRequest request) {
 
-        BorrowRequestResponse createdBorrowRequest =
-                borrowRequestService.createBorrowRequest(request);
-
-        if (createdBorrowRequest == null) {
-            return ResponseEntity.notFound().build();
-        }
-
         return ResponseEntity
                 .status(201)
-                .body(createdBorrowRequest);
+                .body(borrowRequestService.createBorrowRequest(request));
     }
-
 
     // UPDATE
     @PutMapping("/{id}")
@@ -79,15 +58,7 @@ public class BorrowRequestController {
     updateBorrowRequest(
             @PathVariable Long id,
             @Valid @RequestBody BorrowRequestRequest request) {
-
-        BorrowRequestResponse updatedBorrowRequest =
-                borrowRequestService.updateBorrowRequest(id, request);
-
-        if (updatedBorrowRequest == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(updatedBorrowRequest);
+        return ResponseEntity.ok(borrowRequestService.updateBorrowRequest(id, request));
     }
 
 
@@ -96,14 +67,7 @@ public class BorrowRequestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
     deleteBorrowRequest(@PathVariable Long id) {
-
-        boolean deleted =
-                borrowRequestService.deleteBorrowRequest(id);
-
-        if (!deleted) {
-            return ResponseEntity.notFound().build();
-        }
-
+        borrowRequestService.deleteBorrowRequest(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -112,57 +76,32 @@ public class BorrowRequestController {
     @PutMapping("/{id}/approve")
     public ResponseEntity<BorrowRequestResponse> approveBorrowRequest(
             @PathVariable Long id) {
-
-        return ResponseEntity.ok(borrowRequestService.getBorrowRequestById(id));
+        return ResponseEntity.ok(borrowRequestService.approveBorrowRequest(id));
 
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/deny")
     public ResponseEntity<BorrowRequestResponse> denyBorrowRequest(@PathVariable Long id) {
-        BorrowRequestResponse response =
-                borrowRequestService.denyBorrowRequest(id);
-
-        if(response == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(borrowRequestService.denyBorrowRequest(id));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'BORROWER')")
     @PutMapping("/{id}/cancel")
     public ResponseEntity<BorrowRequestResponse> cancelBorrowRequest(@PathVariable Long id) {
         BorrowRequestResponse response = borrowRequestService.cancelBorrowRequest(id);
-
-        if(response == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(borrowRequestService.cancelBorrowRequest(id));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/return")
     public ResponseEntity<BorrowRequestResponse> returnBorrowRequest(@PathVariable Long id) {
-        BorrowRequestResponse response = borrowRequestService.returnBorrowRequest(id);
-
-        if(response == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(borrowRequestService.returnBorrowRequest(id));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/borrow")
     public ResponseEntity<BorrowRequestResponse> borrowBorrowRequest(@PathVariable Long id) {
-        BorrowRequestResponse response = borrowRequestService.borrowBorrowRequest(id);
-
-        if(response == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(borrowRequestService.borrowBorrowRequest(id));
     }
 }
