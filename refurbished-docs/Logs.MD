@@ -59,5 +59,14 @@
 09-05-26: Final testing before exception handling
         : Testing is finished
 
-09-05-26: Exception Handling
+09-06-26: Exception Handling
+        : 
+
+09-06-26: Null Exception Handling
+        : Null Exception for Service
+        : Null Exception for Controller
+
+09-07-26: For Null Exception
+
+
 
