@@ -17,6 +17,7 @@ import org.dean.borrower.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.security.access.AccessDeniedException;
 import java.time.LocalDateTime;
@@ -122,6 +123,7 @@ public class BorrowRequestService {
 
 
     // CREATE
+    @Transactional
     public BorrowRequestResponse createBorrowRequest(
             BorrowRequestRequest request)  {
 
@@ -240,6 +242,7 @@ public class BorrowRequestService {
 
 
     // DELETE
+    @Transactional
     public boolean deleteBorrowRequest(Long id) {
 
         if (!borrowRequestRepository.existsById(id)) {
@@ -253,6 +256,7 @@ public class BorrowRequestService {
     //NON-CRUD METHODS: ========================================================================
 
     //APPROVE
+    @Transactional
     public BorrowRequestResponse approveBorrowRequest(Long id) {
         //1. Get borrow request ID check if it exists
         //3. if it is pending
@@ -304,6 +308,7 @@ public class BorrowRequestService {
     }
 
     //BORROWED
+    @Transactional
     public BorrowRequestResponse borrowBorrowRequest(Long id) {
         BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(
@@ -369,6 +374,7 @@ public class BorrowRequestService {
     //get specific User
 
     //cancel borrowRequest
+    @Transactional
     public BorrowRequestResponse cancelBorrowRequest(Long id) throws AccessDeniedException {
         BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(
@@ -408,6 +414,7 @@ public class BorrowRequestService {
     }
 
     //RETURN
+    @Transactional
     public BorrowRequestResponse returnBorrowRequest(Long id) {
         BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(

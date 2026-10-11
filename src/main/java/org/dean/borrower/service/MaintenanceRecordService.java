@@ -14,7 +14,7 @@ import org.dean.borrower.repository.EquipmentRepository;
 import org.dean.borrower.repository.MaintenanceRecordRepository;
 import org.dean.borrower.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,6 +36,7 @@ public class MaintenanceRecordService {
     }
 
     // ENTITY -> RESPONSE DTO
+    @Transactional
     private MaintenanceRecordResponse toResponse(
             MaintenanceRecord maintenanceRecord) {
 
@@ -51,6 +52,7 @@ public class MaintenanceRecordService {
     }
 
     // GET ALL
+    @Transactional
     public List<MaintenanceRecordResponse> getAllMaintenanceRecords() {
 
         return maintenanceRecordRepository
@@ -61,6 +63,7 @@ public class MaintenanceRecordService {
     }
 
     // GET BY ID
+    @Transactional
     public MaintenanceRecordResponse getMaintenanceRecordById(Long id) {
 
         MaintenanceRecord maintenanceRecord =
@@ -75,6 +78,7 @@ public class MaintenanceRecordService {
     }
 
     // CREATE
+    @Transactional
     public MaintenanceRecordResponse createMaintenanceRecord(
             MaintenanceRecordRequest request) {
 
@@ -126,6 +130,7 @@ public class MaintenanceRecordService {
     }
 
     // UPDATE
+    @Transactional
     public MaintenanceRecordResponse updateMaintenanceRecord(
             Long id,
             MaintenanceRecordRequest request) {
@@ -173,6 +178,7 @@ public class MaintenanceRecordService {
     }
 
     // DELETE
+    @Transactional
     public void deleteMaintenanceRecord(Long id) {
 
         MaintenanceRecord maintenanceRecord =
@@ -187,6 +193,7 @@ public class MaintenanceRecordService {
     }
 
     // EQUIPMENT GOOD
+    @Transactional
     public MaintenanceRecordResponse equipmentGood(Long id) {
 
         MaintenanceRecord maintenanceRecord =
@@ -212,12 +219,14 @@ public class MaintenanceRecordService {
 
         equipmentRepository.save(equipment);
 
+
         maintenanceRecord.setNotes(maintenanceRecord.getNotes());
         maintenanceRecord.setCompletedAt(LocalDateTime.now());
         maintenanceRecord.setCondition(EquipmentCondition.GOOD);
 
         MaintenanceRecord savedMaintenanceRecord =
                 maintenanceRecordRepository.save(maintenanceRecord);
+
 
         return toResponse(savedMaintenanceRecord);
     }
@@ -258,6 +267,7 @@ public class MaintenanceRecordService {
     }
 
     // EQUIPMENT DAMAGED
+    @Transactional
     public MaintenanceRecordResponse equipmentDamaged(Long id) {
 
         MaintenanceRecord maintenanceRecord =
