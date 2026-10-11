@@ -8,6 +8,7 @@ import org.dean.borrower.entity.User;
 import org.dean.borrower.enums.BorrowRequestStatus;
 import org.dean.borrower.enums.EquipmentStatus;
 import org.dean.borrower.enums.Role;
+import org.dean.borrower.exception.BusinessRuleException;
 import org.dean.borrower.exception.ResourceNotFoundException;
 import org.dean.borrower.repository.BorrowRequestItemRepository;
 import org.dean.borrower.repository.BorrowRequestRepository;
@@ -17,8 +18,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import org.springframework.security.access.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Service
 public class BorrowRequestService {
@@ -92,10 +95,8 @@ public class BorrowRequestService {
     }
 
     // GET BY ID
-    public BorrowRequestResponse getBorrowRequestById(Long id) {
-
+    public BorrowRequestResponse getBorrowRequestById(Long id) throws AccessDeniedException {
         User currentUser = getCurrentUser();
-
         //exception
         BorrowRequest borrowRequest =
                 borrowRequestRepository.findById(id).orElseThrow(() ->
@@ -109,7 +110,9 @@ public class BorrowRequestService {
         }
 
         if(!borrowRequest.getBorrower().getId().equals(currentUser.getId())) {
-            return null;
+            throw new AccessDeniedException(
+                    "Permission Denied."
+            );
         }
 
         return toResponse(borrowRequest);
@@ -202,7 +205,9 @@ public class BorrowRequestService {
                     .getId()
                     .equals(currentUser.getId())) { //current user equals to User currentUser = (User)authentication.getPrincipal();
 
-                return null;
+                throw new BusinessRuleException(
+                        "You can only access your own data."
+                );
             }
         }
 
@@ -260,17 +265,20 @@ public class BorrowRequestService {
 
         //grab the status from the borrowrequeststatus enum
         if (currentBorrowRequest.getStatus() != BorrowRequestStatus.PENDING) {
-            return null;
+            throw new BusinessRuleException(
+                    "Only pending requests can be approved."
+            );
         }
 
         //get all items belonging in this request
         List<BorrowRequestItem> items = borrowRequestItemRepository.findByBorrowRequestId(id);
 
-
         for(BorrowRequestItem item: items) {
             Equipment equipment = item.getEquipment();
             if(equipment.getStatus() != EquipmentStatus.AVAILABLE) {
-                return null;
+                throw new BusinessRuleException(
+                        "Equipment with this id: " + id + " is not available"
+                );
             }
         }
 
@@ -305,7 +313,9 @@ public class BorrowRequestService {
 
         //grab the status from the borrowrequeststatus enum
         if (currentBorrowRequest.getStatus() != BorrowRequestStatus.APPROVED) {
-            return null;
+            throw new BusinessRuleException(
+                    "Only approved requests can be borrowed."
+            );
         }
 
         List<BorrowRequestItem> items = borrowRequestItemRepository.findByBorrowRequestId(id);
@@ -317,7 +327,9 @@ public class BorrowRequestService {
             Equipment equipment = item.getEquipment();
 
             if(equipment.getStatus() != EquipmentStatus.RESERVED) {
-                return null;
+                throw new BusinessRuleException(
+                        "Only approved requests can be borrowed"
+                );
             }
             //if it's borrowed
             //set equipment status to borrowed
@@ -327,7 +339,6 @@ public class BorrowRequestService {
         //if valid:
 
         currentBorrowRequest.setStatus(BorrowRequestStatus.BORROWED);
-
 
         BorrowRequest borrowedBorrowRequest = borrowRequestRepository.save(currentBorrowRequest);
         return toResponse(borrowedBorrowRequest);
@@ -343,7 +354,9 @@ public class BorrowRequestService {
 
         //grab the status from the borrowrequeststatus enum
         if (currentBorrowRequest.getStatus() != BorrowRequestStatus.PENDING) {
-            return null;
+            throw new BusinessRuleException(
+                    "Only pending requests can be denied."
+            );
         }
 
         currentBorrowRequest.setStatus(BorrowRequestStatus.DENIED);
@@ -356,7 +369,7 @@ public class BorrowRequestService {
     //get specific User
 
     //cancel borrowRequest
-    public BorrowRequestResponse cancelBorrowRequest(Long id) {
+    public BorrowRequestResponse cancelBorrowRequest(Long id) throws AccessDeniedException {
         BorrowRequest currentBorrowRequest = borrowRequestRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(
                         "Borrow request not found with this id: " + id
@@ -366,7 +379,9 @@ public class BorrowRequestService {
         //grab the status from the borrowrequeststatus enum
         //cant cancel if it's already returned, borrowed, or denied
         if (currentBorrowRequest.getStatus() != BorrowRequestStatus.PENDING && currentBorrowRequest.getStatus() != BorrowRequestStatus.APPROVED) {
-            return null;
+            throw new BusinessRuleException(
+                    "Only pending or approved requests can be cancelled."
+            );
         }
 
         User currentUser = getCurrentUser();
@@ -380,7 +395,9 @@ public class BorrowRequestService {
                     .getId()
                     .equals(currentUser.getId())) { //current user equals to User currentUser = (User)authentication.getPrincipal();
 
-                return null;
+                throw new AccessDeniedException(
+                        "You are not allowed to access this borrow request."
+                );
             }
         }
 
@@ -401,7 +418,9 @@ public class BorrowRequestService {
 
         //grab the status from the borrowrequeststatus enum
         if (currentBorrowRequest.getStatus() != BorrowRequestStatus.BORROWED) {
-            return null;
+            throw new BusinessRuleException(
+                    "Only borrowed requests can be returned."
+            );
         }
 
         List<BorrowRequestItem> items = borrowRequestItemRepository.findByBorrowRequestId(id);

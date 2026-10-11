@@ -91,15 +91,9 @@ public class MaintenanceRecordController {
 
     // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void>
-    deleteMaintenanceRecord(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteMaintenanceRecord(@PathVariable Long id) {
 
-        boolean deleted =
-                maintenanceRecordService.deleteMaintenanceRecord(id);
-
-        if (!deleted) {
-            return ResponseEntity.notFound().build();
-        }
+        maintenanceRecordService.deleteMaintenanceRecord(id);
 
         return ResponseEntity.noContent().build();
     }

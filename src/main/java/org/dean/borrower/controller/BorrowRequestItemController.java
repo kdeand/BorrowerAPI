@@ -32,8 +32,6 @@ public class BorrowRequestItemController {
 
         return ResponseEntity.ok(borrowRequestItems);
     }
-
-
     // CREATE
     @PostMapping
     public ResponseEntity<BorrowRequestItemResponse>

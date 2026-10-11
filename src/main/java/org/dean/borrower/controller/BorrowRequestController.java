@@ -3,12 +3,11 @@ package org.dean.borrower.controller;
 import jakarta.validation.Valid;
 import org.dean.borrower.dto.BorrowRequestRequest;
 import org.dean.borrower.dto.BorrowRequestResponse;
-import org.dean.borrower.entity.BorrowRequest;
+
 import org.dean.borrower.service.BorrowRequestService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -53,6 +52,7 @@ public class BorrowRequestController {
     }
 
     // UPDATE
+    @PreAuthorize("hasAnyRole('ADMIN', 'BORROWER')")
     @PutMapping("/{id}")
     public ResponseEntity<BorrowRequestResponse>
     updateBorrowRequest(
@@ -63,7 +63,7 @@ public class BorrowRequestController {
 
 
     // DELETE
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
     deleteBorrowRequest(@PathVariable Long id) {
@@ -89,7 +89,6 @@ public class BorrowRequestController {
     @PreAuthorize("hasAnyRole('ADMIN', 'BORROWER')")
     @PutMapping("/{id}/cancel")
     public ResponseEntity<BorrowRequestResponse> cancelBorrowRequest(@PathVariable Long id) {
-        BorrowRequestResponse response = borrowRequestService.cancelBorrowRequest(id);
         return ResponseEntity.ok(borrowRequestService.cancelBorrowRequest(id));
     }
 
