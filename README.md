@@ -299,7 +299,3 @@ This command runs the tests currently present in the repository; it does not imp
 - Review authorization for all user-management and maintenance endpoints before public deployment.
 - `@Transactional` helps with atomic updates but does not by itself prevent concurrent reservation races; locking/versioning may be needed.
 - The project is intended as a learning/portfolio backend and has not been presented as production hardened.
-
-## License
-
-No license has been specified yet. Add a `LICENSE` file if you intend to publish the project under an open-source license.
