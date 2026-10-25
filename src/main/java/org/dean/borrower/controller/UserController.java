@@ -7,12 +7,14 @@ import org.dean.borrower.dto.UserResponse;
 import org.dean.borrower.entity.User;
 import org.dean.borrower.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
     private final UserService userService;
 
@@ -21,6 +23,7 @@ public class UserController {
     }
 
     //Get all users
+
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
 

@@ -23,7 +23,7 @@ public class BorrowRequestController {
     }
 
 
-    // GET ALL
+    // GET ALL_
     @GetMapping
     public ResponseEntity<List<BorrowRequestResponse>>
     getAllBorrowRequests() {
